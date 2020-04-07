@@ -1,6 +1,6 @@
 {% set name = "libxc" %}
-{% set version = "4.3.4" %}
-{% set sha256 = "0efe8b33d151de8787e33c4ba8e2161ffb9da978753f3bd12c5c0a018e7d3ef5" %}
+{% set version = "5.0.0" %}
+{% set sha256 = "b4206940db57ba4ddb9cb635fd852914c8dd045cb07bab32427013e3ab294f4f" %}
 
 package:
   name: {{ name }}
@@ -11,7 +11,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 1
+  number: 0
   skip: true  # [not linux]
   run_exports:
     - {{ pin_subpackage('libxc', max_pin='x.x') }}
@@ -37,14 +37,14 @@ test:
     - conda inspect linkages --show-files --groupby=dependency libxc
 
 about:
-    home: http://www.tddft.org/programs/Libxc
-    dev_url: https://gitlab.com/libxc/libxc
-    doc_url: https://gitlab.com/libxc/libxc/wikis/Manual-4.0
-    license: MPL-2.0
-    license_url: https://opensource.org/licenses/MPL-2.0
-    license_file: COPYING
-    license_family: Other
-    summary: "M.A.L. Marques's exchange-correlation functionals for density-functional theory"
+  home: http://www.tddft.org/programs/Libxc
+  dev_url: https://gitlab.com/libxc/libxc
+  doc_url: https://gitlab.com/libxc/libxc/wikis/Manual-4.0
+  license: MPL-2.0
+  license_url: https://opensource.org/licenses/MPL-2.0
+  license_file: COPYING
+  license_family: Other
+  summary: M.A.L. Marques's exchange-correlation functionals for density-functional theory
 
 extra:
   recipe-maintainers:
