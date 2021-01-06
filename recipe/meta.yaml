@@ -1,5 +1,7 @@
 {% set name = "libxc" %}
-{% set version = "5.0.0" %}
+#{% set version = "5.0.0" %}
+#{% set sha256 = "b4206940db57ba4ddb9cb635fd852914c8dd045cb07bab32427013e3ab294f4f" %}
+{% set version = "5.1.0rc1" %}
 {% set sha256 = "b4206940db57ba4ddb9cb635fd852914c8dd045cb07bab32427013e3ab294f4f" %}
 
 package:
@@ -7,28 +9,31 @@ package:
   version: {{ version }}
 
 source:
-  url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
+  #url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
+  url: https://gitlab.com/libxc/libxc/-/archive/hotfix5.1.0/libxc-hotfix5.1.0.tar.gz
   sha256: {{ sha256 }}
 
 build:
-  number: 2
-  skip: true  # [not linux]
+  number: 0
+#  skip: true  # [not linux]
   run_exports:
-    - {{ pin_subpackage('libxc', max_pin='x.x') }}
+    - {{ pin_subpackage('libxc', max_pin='x') }}
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('fortran') }}  # [not win]
-    - libtool                    # [not win]
-    - automake                   # [not win]
-    - cmake                      # [win]
+    - cmake >=3.1
     - ninja                      # [win]
+    - perl
 
 test:
   commands:
     - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
+    - if not exist %PREFIX%\\Library\\lib\\xc.lib exit 1    # [win]
     - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux]
+    - ldd -v $PREFIX/bin/xc-info                            # [linux]
+    - $PREFIX/bin/xc-info 100                               # [linux]
     - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
     - dir "%PREFIX%\Library"                                # [win]
     - dir "%PREFIX%"\Library\include                        # [win]
@@ -39,7 +44,7 @@ test:
 about:
   home: http://www.tddft.org/programs/Libxc
   dev_url: https://gitlab.com/libxc/libxc
-  doc_url: https://gitlab.com/libxc/libxc/wikis/Manual-4.0
+  doc_url: https://www.tddft.org/programs/libxc/manual/libxc-5.0.x/
   license: MPL-2.0
   license_url: https://opensource.org/licenses/MPL-2.0
   license_file: COPYING
