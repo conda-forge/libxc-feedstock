@@ -22,7 +22,6 @@ build:
 
 requirements:
   build:
-    - bzip2                      # [win]
     - {{ compiler('c') }}
     - {{ compiler('fortran') }}  # [linux]
     - cmake >=3.1
@@ -31,16 +30,25 @@ requirements:
 
 test:
   commands:
-    - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
-    - if not exist %PREFIX%\\Library\\lib\\xc.lib exit 1    # [win]
-    - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux]
-    - ldd -v $PREFIX/bin/xc-info                            # [linux]
-    - $PREFIX/bin/xc-info 100                               # [linux]
-    - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
     - dir "%PREFIX%\Library"                                # [win]
     - dir "%PREFIX%"\Library\include                        # [win]
+
+    - test -f $PREFIX/include/xc.h                          # [unix]
     - if not exist "%PREFIX%"\Library\include\xc.h  exit 1  # [win]
-    - conda inspect objects -p $PREFIX $PKG_NAME  # [osx]
+    - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
+    - if not exist %PREFIX%\\Library\\lib\\xc.lib exit 1    # [win]
+    - test ! -f $PREFIX/lib/libxc.a                         # [unix]
+    - test -f $PREFIX/lib/libxcf03$SHLIB_EXT                # [linux]
+
+    - test -f $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
+    - test -f $PREFIX/share/cmake/Libxc/LibxcConfig.cmake   # [unix]
+    - test -f $PREFIX/lib/pkgconfig/libxcf03.pc             # [linux]
+
+    - $PREFIX/bin/xc-info 100
+    - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux]
+    - ldd -v $PREFIX/bin/xc-info                            # [linux]
+    - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
+    - conda inspect objects -p $PREFIX $PKG_NAME            # [osx]
     - conda inspect linkages --show-files --groupby=dependency libxc
 
 about:
