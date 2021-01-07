@@ -33,6 +33,7 @@ test:
     - dir "%PREFIX%\Library"                                # [win]
     - dir "%PREFIX%"\Library\include                        # [win]
     - ls -l $PREFIX/lib                                     # [unix]
+    - ls -l $PREFIX/lib                                     # [unix]
 
     - test -f $PREFIX/include/xc.h                          # [unix]
     - if not exist "%PREFIX%"\Library\include\xc.h  exit 1  # [win]
