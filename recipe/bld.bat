@@ -12,6 +12,7 @@ cmake -G"Ninja" ^
       -DCMAKE_C_FLAGS="/wd4101 /wd4996 %CFLAGS%" ^
       -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=true ^
       -DBUILD_SHARED_LIBS=ON ^
+      -DENABLE_XHOST=OFF ^
       -DBUILD_TESTING=ON
 if errorlevel 1 exit 1
 
