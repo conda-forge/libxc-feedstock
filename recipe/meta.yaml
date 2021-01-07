@@ -23,7 +23,7 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
-#    - {{ compiler('fortran') }}  # [linux]
+    - {{ compiler('fortran') }}  # [linux]
     - cmake >=3.1
     - ninja                      # [win]
     - perl
@@ -33,26 +33,43 @@ test:
     - dir "%PREFIX%\Library"                                # [win]
     - dir "%PREFIX%"\Library\include                        # [win]
 
+
+# 2021-01-07T18:43:07.1281728Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/include/xc.h
+# 2021-01-07T18:43:07.1288645Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/include/xc_funcs.h
+# 2021-01-07T18:43:07.1297164Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/include/xc_funcs_worker.h
+# 2021-01-07T18:43:07.1299668Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/include/xc_version.h
+# 2021-01-07T18:43:07.1304697Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/include/xc_funcs_removed.h
+# 2021-01-07T18:43:07.1489359Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/lib/xc.lib
+# 2021-01-07T18:43:07.1498382Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/bin/xc.dll
+# 2021-01-07T18:43:07.1753904Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/bin/xc-info.exe
+# 2021-01-07T18:43:07.1765050Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/bin/xc-threshold.exe
+# 2021-01-07T18:43:07.1776989Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/share/cmake/Libxc/LibxcConfig.cmake
+# 2021-01-07T18:43:07.1782670Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/share/cmake/Libxc/LibxcConfigVersion.cmake
+# 2021-01-07T18:43:07.1789395Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/share/cmake/Libxc/LibxcTargets.cmake
+# 2021-01-07T18:43:07.1800019Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/share/cmake/Libxc/LibxcTargets-release.cmake
+# 2021-01-07T18:43:07.1807937Z -- Installing: D:/bld/libxc_1610044390677/_h_env/Library/lib/pkgconfig/libxc.pc
+# 2021-01-07T18:43:07.2262256Z Test project D:/bld/libxc_1610044390677/work/build
+# 2021-01-07T18:43:07.2391055Z No tests were found!!!
+
+
     - test -f $PREFIX/include/xc.h                          # [unix]
     - if not exist "%PREFIX%"\Library\include\xc.h  exit 1  # [win]
     - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
     - if not exist "%PREFIX%"\\Library\\lib\\xc.lib exit 1    # [win]
     - test ! -f $PREFIX/lib/libxc.a                         # [unix]
-#    - test -f $PREFIX/lib/libxcf03$SHLIB_EXT                # [linux]
+    - test -f $PREFIX/lib/libxcf03$SHLIB_EXT                # [linux]
 
     - test -f $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
     - test -f $PREFIX/share/cmake/Libxc/LibxcConfig.cmake   # [unix]
-#    - test -f $PREFIX/lib/pkgconfig/libxcf03.pc             # [linux]
+    - test -f $PREFIX/lib/pkgconfig/libxcf03.pc             # [linux]
 
-    #- $PREFIX/bin/xc-info 100                               # [unix]
-    #- "%PREFIX%"/Library/bin/xc-info.exe 100                # [win]
     - xc-info 100                                           # [unix]
     - xc-info.exe 100                                       # [win]
     - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux]
     - ldd -v $PREFIX/bin/xc-info                            # [linux]
     - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
     - conda inspect objects -p $PREFIX $PKG_NAME            # [osx]
-    - conda inspect linkages --show-files --groupby=dependency libxc
+    - conda inspect linkages --show-files --groupby=dependency libxc  # [unix]
 
 about:
   home: http://www.tddft.org/programs/Libxc
