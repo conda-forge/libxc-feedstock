@@ -3,7 +3,8 @@ if [ "$(uname)" == "Darwin" ]; then
     ENABLE_FORTRAN=OFF
 fi
 if [ "$(uname)" == "Linux" ]; then
-    ENABLE_FORTRAN=ON
+    #ENABLE_FORTRAN=ON
+    ENABLE_FORTRAN=OFF
 fi
 
 

@@ -10,8 +10,9 @@ package:
 
 source:
   #url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
-  url: https://gitlab.com/libxc/libxc/-/archive/hotfix5.1.0/libxc-hotfix5.1.0.tar.gz
-  sha256: {{ sha256 }}
+  url: https://gitlab.com/loriab/libxc/-/archive/cmake_win/libxc-cmake_win.tar.gz
+#  url: https://gitlab.com/libxc/libxc/-/archive/hotfix5.1.0/libxc-hotfix5.1.0.tar.gz
+#  sha256: {{ sha256 }}
 
 build:
   number: 0
@@ -22,7 +23,7 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
-    - {{ compiler('fortran') }}  # [linux]
+#    - {{ compiler('fortran') }}  # [linux]
     - cmake >=3.1
     - ninja                      # [win]
     - perl
@@ -37,11 +38,11 @@ test:
     - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
     - if not exist %PREFIX%\\Library\\lib\\xc.lib exit 1    # [win]
     - test ! -f $PREFIX/lib/libxc.a                         # [unix]
-    - test -f $PREFIX/lib/libxcf03$SHLIB_EXT                # [linux]
+#    - test -f $PREFIX/lib/libxcf03$SHLIB_EXT                # [linux]
 
     - test -f $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
     - test -f $PREFIX/share/cmake/Libxc/LibxcConfig.cmake   # [unix]
-    - test -f $PREFIX/lib/pkgconfig/libxcf03.pc             # [linux]
+#    - test -f $PREFIX/lib/pkgconfig/libxcf03.pc             # [linux]
 
     - $PREFIX/bin/xc-info 100
     - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux]
