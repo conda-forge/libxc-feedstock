@@ -55,12 +55,14 @@ test:
     - test -f $PREFIX/include/xc.h                          # [unix]
     - if not exist "%PREFIX%"\Library\include\xc.h  exit 1  # [win]
     - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
-    - if not exist "%PREFIX%"\\Library\\lib\\xc.lib exit 1    # [win]
+    - if not exist "%PREFIX%"\\Library\\lib\\xc.lib exit 1  # [win]
     - test ! -f $PREFIX/lib/libxc.a                         # [unix]
+    - test -f $PREFIX/lib/libxcf90$SHLIB_EXT                # [linux]
     - test -f $PREFIX/lib/libxcf03$SHLIB_EXT                # [linux]
 
-    - test -f $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
     - test -f $PREFIX/share/cmake/Libxc/LibxcConfig.cmake   # [unix]
+    - test -f $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
+    - test -f $PREFIX/lib/pkgconfig/libxcf90.pc             # [linux]
     - test -f $PREFIX/lib/pkgconfig/libxcf03.pc             # [linux]
 
     - xc-info 100                                           # [unix]
