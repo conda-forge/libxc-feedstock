@@ -10,7 +10,7 @@ package:
 
 source:
   #url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
-  url: https://gitlab.com/loriab/libxc/-/archive/cmake_win/libxc-cmake_win.tar.gz
+  url: https://gitlab.com/loriab/libxc/-/archive/cmake_win_fresh/libxc-cmake_win_fresh.tar.gz
 #  url: https://gitlab.com/libxc/libxc/-/archive/hotfix5.1.0/libxc-hotfix5.1.0.tar.gz
 #  sha256: {{ sha256 }}
 
