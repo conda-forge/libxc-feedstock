@@ -1,6 +1,6 @@
 {% set name = "libxc" %}
-{% set version = "5.0.0" %}
-{% set sha256 = "b4206940db57ba4ddb9cb635fd852914c8dd045cb07bab32427013e3ab294f4f" %}
+{% set version = "5.1.0" %}
+{% set sha256 = "36136909c919ef21c5605cbaec070a0b7b5cc5819cba26b6a40fe45b82e828ea" %}
 
 package:
   name: {{ name }}
@@ -11,35 +11,52 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 2
-  skip: true  # [not linux]
+  number: 0
   run_exports:
-    - {{ pin_subpackage('libxc', max_pin='x.x') }}
+    - {{ pin_subpackage('libxc', max_pin='x') }}
 
 requirements:
   build:
     - {{ compiler('c') }}
-    - {{ compiler('fortran') }}  # [not win]
-    - libtool                    # [not win]
-    - automake                   # [not win]
-    - cmake                      # [win]
+    - {{ compiler('fortran') }}  # [linux]
+    - cmake >=3.1
     - ninja                      # [win]
+    - perl
 
 test:
   commands:
-    - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
-    - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux]
-    - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
     - dir "%PREFIX%\Library"                                # [win]
     - dir "%PREFIX%"\Library\include                        # [win]
-    - if not exist "%PREFIX%"\Library\include\xc.h  exit 1  # [win]
-    - conda inspect objects -p $PREFIX $PKG_NAME  # [osx]
-    - conda inspect linkages --show-files --groupby=dependency libxc
+    - ls -l $PREFIX/lib                                     # [unix]
+    - ls -l $PREFIX/share/cmake/Libxc                       # [unix]
+    # Verify library
+    - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
+    - test ! -f $PREFIX/lib/libxc.a                         # [unix]
+    - if not exist %PREFIX%\\Library\\lib\\xc.lib exit 1    # [win]
+    - if not exist %PREFIX%\\Library\\bin\\xc.dll exit 1    # [win]
+    - test -f $PREFIX/lib/libxcf90$SHLIB_EXT                # [linux]
+    - test -f $PREFIX/lib/libxcf03$SHLIB_EXT                # [linux]
+    # Verify accessories
+    - test -f $PREFIX/include/xc.h                          # [unix]
+    - if not exist %PREFIX%\\Library\\include\\xc.h exit 1  # [win]
+    - test -f $PREFIX/share/cmake/Libxc/LibxcConfig.cmake   # [unix]
+    - if not exist %PREFIX%\\Library\\share\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
+    - test -f $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
+    - test -f $PREFIX/lib/pkgconfig/libxcf90.pc             # [linux]
+    - test -f $PREFIX/lib/pkgconfig/libxcf03.pc             # [linux]
+    # Inspect linkage
+    - xc-info 100                                           # [unix]
+    - xc-info.exe 100                                       # [win]
+    - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux]
+    - ldd -v $PREFIX/bin/xc-info                            # [linux]
+    - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
+    - conda inspect objects -p $PREFIX $PKG_NAME            # [osx]
+    - conda inspect linkages --show-files --groupby=dependency libxc  # [unix]
 
 about:
   home: http://www.tddft.org/programs/Libxc
   dev_url: https://gitlab.com/libxc/libxc
-  doc_url: https://gitlab.com/libxc/libxc/wikis/Manual-4.0
+  doc_url: https://www.tddft.org/programs/libxc/manual/libxc-5.0.x/
   license: MPL-2.0
   license_url: https://opensource.org/licenses/MPL-2.0
   license_file: COPYING
