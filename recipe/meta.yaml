@@ -1,6 +1,6 @@
 {% set name = "libxc" %}
-{% set version = "5.0.0" %}
-{% set sha256 = "b4206940db57ba4ddb9cb635fd852914c8dd045cb07bab32427013e3ab294f4f" %}
+{% set version = "5.1.0" %}
+{% set sha256 = "36136909c919ef21c5605cbaec070a0b7b5cc5819cba26b6a40fe45b82e828ea" %}
 
 package:
   name: {{ name }}
@@ -11,7 +11,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 2
+  number: 0
   skip: true  # [not linux]
   run_exports:
     - {{ pin_subpackage('libxc', max_pin='x.x') }}
@@ -33,8 +33,6 @@ test:
     - dir "%PREFIX%\Library"                                # [win]
     - dir "%PREFIX%"\Library\include                        # [win]
     - if not exist "%PREFIX%"\Library\include\xc.h  exit 1  # [win]
-    - conda inspect objects -p $PREFIX $PKG_NAME  # [osx]
-    - conda inspect linkages --show-files --groupby=dependency libxc
 
 about:
   home: http://www.tddft.org/programs/Libxc
