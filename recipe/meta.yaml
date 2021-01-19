@@ -1,6 +1,6 @@
 {% set name = "libxc" %}
 {% set version = "5.1.0" %}
-{% set sha256 = "e0938220425e157f936085c966726314b3f27c19792fecc3753a17f600bff5ad" %}
+{% set sha256 = "36136909c919ef21c5605cbaec070a0b7b5cc5819cba26b6a40fe45b82e828ea" %}
 
 package:
   name: {{ name }}
@@ -8,7 +8,6 @@ package:
 
 source:
   url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
-  #url: https://gitlab.com/libxc/libxc/-/archive/hotfix5.1.0/libxc-hotfix5.1.0.tar.gz
   sha256: {{ sha256 }}
 
 build:
