@@ -1,6 +1,6 @@
 {% set name = "libxc" %}
-{% set version = "5.1.0" %}
-{% set sha256 = "36136909c919ef21c5605cbaec070a0b7b5cc5819cba26b6a40fe45b82e828ea" %}
+{% set version = "5.1.1" %}
+{% set sha256 = "892ee4709468e1b0278a569086560f275ecca5df4845cdee3a35f928e4d10695" %}
 
 package:
   name: {{ name }}
@@ -50,8 +50,6 @@ test:
     - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux]
     - ldd -v $PREFIX/bin/xc-info                            # [linux]
     - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
-    - conda inspect objects -p $PREFIX $PKG_NAME            # [osx]
-    - conda inspect linkages --show-files --groupby=dependency libxc  # [unix]
 
 about:
   home: http://www.tddft.org/programs/Libxc
