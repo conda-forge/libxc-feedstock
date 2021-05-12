@@ -1,6 +1,6 @@
 {% set name = "libxc" %}
-{% set version = "5.1.3" %}
-{% set sha256 = "519b6dc14ce0ba475fa2e6a672182d86200e85d4e17cd6bc059ae45b7c1d576e" %}
+{% set version = "5.1.4" %}
+{% set sha256 = "17ea2328552bccc01463b76f41c297bde8bfc4868951a08c010aba326222cebe" %}
 
 package:
   name: {{ name }}
