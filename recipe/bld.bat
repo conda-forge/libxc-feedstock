@@ -12,6 +12,7 @@ cmake -G"Ninja" ^
       -DCMAKE_C_FLAGS="/wd4101 /wd4996 %CFLAGS%" ^
       -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON ^
       -DBUILD_SHARED_LIBS=ON ^
+      -DENABLE_PYTHON=ON ^
       -DENABLE_XHOST=OFF ^
       -DBUILD_TESTING=OFF
 if errorlevel 1 exit 1
@@ -26,4 +27,3 @@ if errorlevel 1 exit 1
 ctest --output-on-failure
 if errorlevel 1 exit 1
 :: tests outside build phase
-

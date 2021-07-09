@@ -17,6 +17,7 @@ ${BUILD_PREFIX}/bin/cmake \
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DNAMESPACE_INSTALL_INCLUDEDIR="/" \
     -DBUILD_SHARED_LIBS=ON \
+    -DENABLE_PYTHON=ON \
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON
@@ -25,5 +26,10 @@ cd build
 make -j${CPU_COUNT}
 
 make install
+
+# Relocate python scripts to expected location:
+# (Avoiding setup.py which runs cmake again, separately)
+mkdir -p ${SP_DIR}
+mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
 
 ctest
