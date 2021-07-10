@@ -11,7 +11,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 0
+  number: 1
   run_exports:
     - {{ pin_subpackage('libxc', max_pin='x') }}
 
@@ -22,6 +22,10 @@ requirements:
     - cmake >=3.1
     - ninja                      # [win]
     - perl
+  host:
+    - python
+  run:
+    - python
 
 test:
   commands:
