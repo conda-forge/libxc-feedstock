@@ -14,7 +14,9 @@ cmake -G"Ninja" ^
       -DBUILD_SHARED_LIBS=ON ^
       -DENABLE_PYTHON=ON ^
       -DENABLE_XHOST=OFF ^
-      -DBUILD_TESTING=OFF
+      -DBUILD_TESTING=OFF ^
+      -DDISABLE_KXC=OFF
+
 if errorlevel 1 exit 1
 
 cd build
