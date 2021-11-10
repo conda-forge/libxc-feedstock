@@ -15,7 +15,8 @@ cmake -G"Ninja" ^
       -DENABLE_PYTHON=ON ^
       -DENABLE_XHOST=OFF ^
       -DBUILD_TESTING=OFF ^
-      -DDISABLE_KXC=OFF
+      -DDISABLE_KXC=OFF ^
+      -DDISABLE_LXC=OFF
 
 if errorlevel 1 exit 1
 
