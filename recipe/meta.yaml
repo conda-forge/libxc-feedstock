@@ -52,8 +52,8 @@ test:
     # Inspect linkage
     - xc-info 100                                           # [unix]
     - xc-info.exe 100                                       # [win]
-    - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux]
-    - ldd -v $PREFIX/bin/xc-info                            # [linux]
+    - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux and build_platform == target_platform]
+    - ldd -v $PREFIX/bin/xc-info                            # [linux and build_platform == target_platform]
     - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
 
 about:
