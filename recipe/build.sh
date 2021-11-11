@@ -7,7 +7,7 @@ if [ "$(uname)" == "Linux" ]; then
 fi
 
 
-${BUILD_PREFIX}/bin/cmake \
+${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
     -DCMAKE_INSTALL_PREFIX=${PREFIX} \
