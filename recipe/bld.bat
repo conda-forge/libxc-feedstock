@@ -1,5 +1,5 @@
 
-cmake -G"Ninja" ^
+cmake ${CMAKE_ARGS} -G"Ninja" ^
       -H%SRC_DIR% ^
       -Bbuild ^
       -DCMAKE_BUILD_TYPE=Release ^
@@ -14,7 +14,10 @@ cmake -G"Ninja" ^
       -DBUILD_SHARED_LIBS=ON ^
       -DENABLE_PYTHON=ON ^
       -DENABLE_XHOST=OFF ^
-      -DBUILD_TESTING=OFF
+      -DBUILD_TESTING=OFF ^
+      -DDISABLE_KXC=OFF ^
+      -DDISABLE_LXC=OFF
+
 if errorlevel 1 exit 1
 
 cd build
