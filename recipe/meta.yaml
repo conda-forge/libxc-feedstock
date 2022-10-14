@@ -1,6 +1,6 @@
 {% set name = "libxc" %}
-{% set version = "5.2.3" %}
-{% set sha256 = "6cd45669d7f92bdcdb6879bea232dac94ad57d025cf2edfd019182ccf6494a75" %}
+{% set version = "6.0.0" %}
+{% set sha256 = "f182fac31ba7682e3483cb89837be090a266a3349593fafb147ab2e203f36a57" %}
 
 package:
   name: {{ name }}
@@ -11,7 +11,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 1
+  number: 0
   run_exports:
     - {{ pin_subpackage('libxc', max_pin='x') }}
 
