@@ -48,7 +48,7 @@ else
 fi
 
 cd build
-make -j${CPU_COUNT}
+make -j
 
 make install
 
@@ -57,4 +57,4 @@ make install
 mkdir -p ${SP_DIR}
 mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
 
-# ctest --repeat until-pass:5
+# ctest -j
