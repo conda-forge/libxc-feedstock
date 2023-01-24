@@ -57,4 +57,12 @@ make install
 mkdir -p ${SP_DIR}
 mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
 
-# ctest -j
+#
+# Quick test (< 10s) to ensure build sanity
+#
+ctest_regexps=(
+  'Libxc-lda_xc$'
+)
+for ctest_regexp in ${ctest_regexps[@]}; do
+  ctest -R "${ctest_regexp}"
+done

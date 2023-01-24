@@ -44,7 +44,7 @@ test:
     # Verify accessories
     - test -f $PREFIX/include/xc.h                          # [unix]
     - if not exist %PREFIX%\\Library\\include\\xc.h exit 1  # [win]
-    - test -f $PREFIX/lib/cmake/Libxc/LibxcConfig.cmake   # [unix]
+    - test -f $PREFIX/lib/cmake/Libxc/LibxcConfig.cmake     # [unix]
     - if not exist %PREFIX%\\Library\\lib\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
     - test -f $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
     - test -f $PREFIX/lib/pkgconfig/libxcf90.pc             # [linux]
