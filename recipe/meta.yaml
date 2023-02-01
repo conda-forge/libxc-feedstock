@@ -1,6 +1,6 @@
 {% set name = "libxc" %}
-{% set version = "5.2.3" %}
-{% set sha256 = "6cd45669d7f92bdcdb6879bea232dac94ad57d025cf2edfd019182ccf6494a75" %}
+{% set version = "6.1.0" %}
+{% set sha256 = "04dcfbdb89ab0d9ae05d8534c46edf4f9ba60dd6b7633ce72f6cb3c9773bb344" %}
 
 package:
   name: {{ name }}
@@ -11,7 +11,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 2
+  number: 0
   run_exports:
     - {{ pin_subpackage('libxc', max_pin='x') }}
 
@@ -44,7 +44,7 @@ test:
     # Verify accessories
     - test -f $PREFIX/include/xc.h                          # [unix]
     - if not exist %PREFIX%\\Library\\include\\xc.h exit 1  # [win]
-    - test -f $PREFIX/share/cmake/Libxc/LibxcConfig.cmake   # [unix]
+    - test -f $PREFIX/lib/cmake/Libxc/LibxcConfig.cmake     # [unix]
     - if not exist %PREFIX%\\Library\\share\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
     - test -f $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
     - test -f $PREFIX/lib/pkgconfig/libxcf90.pc             # [linux]
