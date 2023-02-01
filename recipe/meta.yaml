@@ -33,7 +33,7 @@ test:
     - dir "%PREFIX%\Library"                                # [win]
     - dir "%PREFIX%"\Library\include                        # [win]
     - ls -l $PREFIX/lib                                     # [unix]
-    - ls -l $PREFIX/share/cmake/Libxc                       # [unix]
+    - ls -l $PREFIX/lib/cmake/Libxc                         # [unix]
     # Verify library
     - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
     - test ! -f $PREFIX/lib/libxc.a                         # [unix]
@@ -45,7 +45,7 @@ test:
     - test -f $PREFIX/include/xc.h                          # [unix]
     - if not exist %PREFIX%\\Library\\include\\xc.h exit 1  # [win]
     - test -f $PREFIX/lib/cmake/Libxc/LibxcConfig.cmake     # [unix]
-    - if not exist %PREFIX%\\Library\\share\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
+    - if not exist %PREFIX%\\Library\\lib\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
     - test -f $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
     - test -f $PREFIX/lib/pkgconfig/libxcf90.pc             # [linux]
     - test -f $PREFIX/lib/pkgconfig/libxcf03.pc             # [linux]
