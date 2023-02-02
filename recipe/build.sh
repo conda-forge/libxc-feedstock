@@ -44,11 +44,11 @@ else
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON \
     -DDISABLE_KXC=OFF \
-    -DDISABLE_LXC=OFF
+    -DDISABLE_LXC=ON
 fi
 
 cd build
-make -j
+make -j${CPU_COUNT}
 
 make install
 
@@ -57,12 +57,5 @@ make install
 mkdir -p ${SP_DIR}
 mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
 
-#
-# Quick test (< 10s) to ensure build sanity
-#
-ctest_regexps=(
-  'Libxc-lda_xc$'
-)
-for ctest_regexp in ${ctest_regexps[@]}; do
-  ctest -R "${ctest_regexp}"
-done
+# Test the project
+ctest --repeat until-pass:5
