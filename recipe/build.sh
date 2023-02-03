@@ -44,7 +44,7 @@ else
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON \
     -DDISABLE_KXC=OFF \
-    -DDISABLE_LXC=ON
+    -DDISABLE_LXC_ECONOMY=OFF
 fi
 
 cd build
