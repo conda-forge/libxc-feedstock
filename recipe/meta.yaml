@@ -1,15 +1,16 @@
 {% set name = "libxc" %}
 {% set version = "6.1.0" %}
-#{% set sha256 = "04dcfbdb89ab0d9ae05d8534c46edf4f9ba60dd6b7633ce72f6cb3c9773bb344" %}
+{% set sha256 = "04dcfbdb89ab0d9ae05d8534c46edf4f9ba60dd6b7633ce72f6cb3c9773bb344" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://gitlab.com/loriab/libxc/-/archive/econ4der.tar.bz2
-  #url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
-  #sha256: {{ sha256 }}
+  url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
+  patches:
+    - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
+  sha256: {{ sha256 }}
 
 build:
   number: 0
@@ -60,7 +61,7 @@ test:
 about:
   home: http://www.tddft.org/programs/Libxc
   dev_url: https://gitlab.com/libxc/libxc
-  doc_url: https://www.tddft.org/programs/libxc/manual/libxc-5.0.x/
+  doc_url: https://www.tddft.org/programs/libxc/manual/
   license: MPL-2.0
   license_url: https://opensource.org/licenses/MPL-2.0
   license_file: COPYING
