@@ -1,0 +1,185 @@
+From 97416c9a135e649992c05340aef6290129dc3a2f Mon Sep 17 00:00:00 2001
+From: "Lori A. Burns" <lori.burns@gmail.com>
+Date: Fri, 3 Feb 2023 14:25:10 -0500
+Subject: [PATCH] disable longest 4th deriv offenders and rework deriv option
+
+more deriv handling
+
+Conflicts:
+	cmake/LibxcConfig.cmake.in
+---
+ CMakeLists.txt             | 54 +++++++++++++++++++++++++++++++++++-----------
+ cmake/LibxcConfig.cmake.in |  8 ++++++-
+ cmake/xc_deriv.cmake       | 43 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 91 insertions(+), 14 deletions(-)
+ create mode 100644 cmake/xc_deriv.cmake
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b3a30ee..023f899 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -28,10 +28,20 @@ if(${ENABLE_PYTHON} AND NOT ${BUILD_SHARED_LIBS})
+   message(FATAL_ERROR "ENABLE_PYTHON ON requires BUILD_SHARED_LIBS ON because only shared libraries can be dynamically loaded")
+ endif()
+ include(xhost)  # defines: option(ENABLE_XHOST "Enable processor-specific optimization" ON)
+-option_with_print(DISABLE_VXC "Don't compile first derivative code" OFF)
+-option_with_print(DISABLE_FXC "Don't compile second derivative code" OFF)
+-option_with_print(DISABLE_KXC "Don't compile third derivative code" ON)
+-option_with_print(DISABLE_LXC "Don't compile fourth derivative code" ON)
++option_with_default(LIBXC_ENABLE_DERIV
++  "Compile with support for up to N-th derivatives of functionals:
++    0  -- energy-only
++    1  -- first-derivative code (formerly controlled by DISABLE_VXC)
++    2  -- second-derivative code (formerly controlled by DISABLE_FXC)
++    3  -- third-derivative code (formerly controlled by DISABLE_KXC)
++    4e -- fourth-derivative code, economy selection. Skips certain functionals that are expensive and less useful.
++    4  -- fourth-derivative code (formerly controlled by DISABLE_LXC)
++   Replaces options DISABLE_VXC, DISABLE_FXC, DISABLE_KXC, DISABLE_LXC which, for continuity, still take precedence." 2)
++# ACCEPTED BUT DEPRECATED option_with_print(DISABLE_VXC "Don't compile first derivative code" OFF)
++# ACCEPTED BUT DEPRECATED option_with_print(DISABLE_FXC "Don't compile second derivative code" OFF)
++# ACCEPTED BUT DEPRECATED option_with_print(DISABLE_KXC "Don't compile third derivative code" ON)
++# ACCEPTED BUT DEPRECATED option_with_print(DISABLE_LXC "Don't compile fourth derivative code" ON)
++include(xc_deriv)
+ option_with_print(DISABLE_FHC "Disable enforcement of Fermi hole curvature?" OFF)
+ 
+ ######################### Process & Validate Options ###########################
+@@ -60,27 +70,45 @@ if (HAVE_CBRT)
+ endif (HAVE_CBRT)
+ 
+ # Turn off derivative code
+-if(DISABLE_VXC)
++if (LIBXC_ENABLE_DERIV STREQUAL "0")
+   add_definitions (-DXC_DONT_COMPILE_VXC)
+   add_definitions (-DXC_DONT_COMPILE_FXC)
+   add_definitions (-DXC_DONT_COMPILE_KXC)
+   add_definitions (-DXC_DONT_COMPILE_LXC)
+-endif(DISABLE_VXC)
+-if(DISABLE_FXC)
++  message(STATUS "Disabling all 1st, 2nd, 3rd, 4th derivatives")
++
++elseif (LIBXC_ENABLE_DERIV STREQUAL "1")
+   add_definitions (-DXC_DONT_COMPILE_FXC)
+   add_definitions (-DXC_DONT_COMPILE_KXC)
+   add_definitions (-DXC_DONT_COMPILE_LXC)
+-endif(DISABLE_FXC)
+-if(DISABLE_KXC)
++  message(STATUS "Disabling all 2nd, 3rd, 4th derivatives")
++
++elseif (LIBXC_ENABLE_DERIV STREQUAL "2")
+   add_definitions (-DXC_DONT_COMPILE_KXC)
+   add_definitions (-DXC_DONT_COMPILE_LXC)
+-endif(DISABLE_KXC)
+-if(DISABLE_LXC)
++  message(STATUS "Disabling all 3rd, 4th derivatives")
++
++elseif (LIBXC_ENABLE_DERIV STREQUAL "3")
+   add_definitions (-DXC_DONT_COMPILE_LXC)
+-endif(DISABLE_LXC)
++  message(STATUS "Disabling all 4th derivatives")
++
++elseif (LIBXC_ENABLE_DERIV STREQUAL "4e")
++  # see https://gitlab.com/libxc/libxc/-/issues/448
++  set_source_files_properties(
++    src/mgga_x_br89.c
++    src/mgga_x_mbrxh_bg.c
++    src/mgga_x_mbrxc_bg.c
++    # src/mgga_x_mggac.c
++    PROPERTIES
++      COMPILE_DEFINITIONS
++        XC_DONT_COMPILE_LXC
++    )
++  message(STATUS "Disabling most expensive and least useful 4th derivatives")
++endif()
++
+ if(NOT DISABLE_FHC)
+   add_definitions (-DXC_ENFORCE_FERMI_HOLE_CURVATURE)
+-endif(NOT DISABLE_FHC)
++endif()
+ 
+ # <<<  Build  >>>
+ 
+diff --git a/cmake/LibxcConfig.cmake.in b/cmake/LibxcConfig.cmake.in
+index ada562e..802ace3 100644
+--- a/cmake/LibxcConfig.cmake.in
++++ b/cmake/LibxcConfig.cmake.in
+@@ -20,6 +20,7 @@
+ #   static - search for only static library
+ #   C - search for C library only, even if Fortran available
+ #   Fortran - search for Fortran library (C library always present)
++#   xc_dD - search for library including functional derivatives order D (D=0..4)
+ #
+ #
+ # Exported targets:
+@@ -41,7 +42,7 @@
+ # ::
+ #
+ #   find_package(Libxc)
+-#   find_package(Libxc 5.1.0 EXACT CONFIG REQUIRED COMPONENTS shared C)
++#   find_package(Libxc 6.0.0 EXACT CONFIG REQUIRED COMPONENTS shared C xc_d2)
+ #
+ #
+ # The following variables can be set to guide the search for this package:
+@@ -83,6 +84,11 @@ if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/${PN}Targets-Fortran.cmake")
+ endif()
+ list(FIND ${PN}_FIND_COMPONENTS "Fortran" _seek_Fortran)
+ 
++# check derivative component
++foreach(_xcd @Libxc_DERIV_COMPONENTS@)
++    set(${PN}_${_xcd}_FOUND 1)
++endforeach()
++
+ check_required_components(${PN})
+ 
+ #-----------------------------------------------------------------------------
+diff --git a/cmake/xc_deriv.cmake b/cmake/xc_deriv.cmake
+new file mode 100644
+index 0000000..0b3a600
+--- /dev/null
++++ b/cmake/xc_deriv.cmake
+@@ -0,0 +1,43 @@
++# Handle LIBXC_ENABLE_DERIV, DISABLE_VXC, DISABLE_FXC, DISABLE_KXC, DISABLE_LXC
++
++if ((DEFINED DISABLE_VXC) OR (DEFINED DISABLE_FXC) OR (DEFINED DISABLE_KXC) OR (DEFINED DISABLE_LXC))
++    message(WARNING "Using DISABLE_VXC/DISABLE_FXC/DISABLE_KXC/DISABLE_LXC instead of LIBXC_ENABLE_DERIV is deprecated could be removed as soon as v1.8")
++    if ((DEFINED DISABLE_LXC) AND (NOT DISABLE_LXC))
++        set(_deriv "4")
++    elseif ((DEFINED DISABLE_KXC) AND (NOT DISABLE_KXC))
++        set(_deriv "3")
++    elseif ((DEFINED DISABLE_FXC) AND (NOT DISABLE_FXC))
++        set(_deriv "2")
++    elseif ((DEFINED DISABLE_VXC) AND (NOT DISABLE_VXC))
++        set(_deriv "1")
++    endif()
++else()
++    if ((LIBXC_ENABLE_DERIV STREQUAL "0") OR
++        (LIBXC_ENABLE_DERIV STREQUAL "1") OR
++        (LIBXC_ENABLE_DERIV STREQUAL "2") OR
++        (LIBXC_ENABLE_DERIV STREQUAL "3") OR
++        (LIBXC_ENABLE_DERIV STREQUAL "4e") OR
++        (LIBXC_ENABLE_DERIV STREQUAL "4E") OR
++        (LIBXC_ENABLE_DERIV STREQUAL "4"))
++          string(TOLOWER "${LIBXC_ENABLE_DERIV}" _deriv)
++    else()
++        message(FATAL_ERROR "Invalid value for LIBXC_ENABLE_DERIV (${LIBXC_ENABLE_DERIV})")
++    endif()
++endif()
++
++set(LIBXC_ENABLE_DERIV "${_deriv}")
++
++if (LIBXC_ENABLE_DERIV STREQUAL "0")
++    set(Libxc_DERIV_COMPONENTS "xc_d0")
++elseif (LIBXC_ENABLE_DERIV STREQUAL "1")
++    set(Libxc_DERIV_COMPONENTS "xc_d0;xc_d1")
++elseif (LIBXC_ENABLE_DERIV STREQUAL "2")
++    set(Libxc_DERIV_COMPONENTS "xc_d0;xc_d1;xc_d2")
++elseif (LIBXC_ENABLE_DERIV STREQUAL "3")
++    set(Libxc_DERIV_COMPONENTS "xc_d0;xc_d1;xc_d2;xc_d3")
++elseif ((LIBXC_ENABLE_DERIV STREQUAL "4e") OR (LIBXC_ENABLE_DERIV STREQUAL "4"))
++    set(Libxc_DERIV_COMPONENTS "xc_d0;xc_d1;xc_d2;xc_d3;xc_d4")
++endif()
++
++message(STATUS "Final Maximum Derivative: ${LIBXC_ENABLE_DERIV}")
++message(STATUS "Library will satisfy XC DERIV components: ${Libxc_DERIV_COMPONENTS}")
+-- 
+1.8.3.1
+
