@@ -1,6 +1,6 @@
 {% set name = "libxc" %}
-{% set version = "5.2.3" %}
-{% set sha256 = "6cd45669d7f92bdcdb6879bea232dac94ad57d025cf2edfd019182ccf6494a75" %}
+{% set version = "6.1.0" %}
+{% set sha256 = "04dcfbdb89ab0d9ae05d8534c46edf4f9ba60dd6b7633ce72f6cb3c9773bb344" %}
 
 package:
   name: {{ name }}
@@ -8,10 +8,12 @@ package:
 
 source:
   url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
+  patches:
+    - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
   sha256: {{ sha256 }}
 
 build:
-  number: 2
+  number: 0
   run_exports:
     - {{ pin_subpackage('libxc', max_pin='x') }}
 
@@ -33,7 +35,7 @@ test:
     - dir "%PREFIX%\Library"                                # [win]
     - dir "%PREFIX%"\Library\include                        # [win]
     - ls -l $PREFIX/lib                                     # [unix]
-    - ls -l $PREFIX/share/cmake/Libxc                       # [unix]
+    - ls -l $PREFIX/lib/cmake/Libxc                         # [unix]
     # Verify library
     - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
     - test ! -f $PREFIX/lib/libxc.a                         # [unix]
@@ -44,8 +46,8 @@ test:
     # Verify accessories
     - test -f $PREFIX/include/xc.h                          # [unix]
     - if not exist %PREFIX%\\Library\\include\\xc.h exit 1  # [win]
-    - test -f $PREFIX/share/cmake/Libxc/LibxcConfig.cmake   # [unix]
-    - if not exist %PREFIX%\\Library\\share\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
+    - test -f $PREFIX/lib/cmake/Libxc/LibxcConfig.cmake     # [unix]
+    - if not exist %PREFIX%\\Library\\lib\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
     - test -f $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
     - test -f $PREFIX/lib/pkgconfig/libxcf90.pc             # [linux]
     - test -f $PREFIX/lib/pkgconfig/libxcf03.pc             # [linux]
@@ -59,7 +61,7 @@ test:
 about:
   home: http://www.tddft.org/programs/Libxc
   dev_url: https://gitlab.com/libxc/libxc
-  doc_url: https://www.tddft.org/programs/libxc/manual/libxc-5.0.x/
+  doc_url: https://www.tddft.org/programs/libxc/manual/
   license: MPL-2.0
   license_url: https://opensource.org/licenses/MPL-2.0
   license_file: COPYING
