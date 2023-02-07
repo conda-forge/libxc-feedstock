@@ -159,7 +159,7 @@ about:
   summary: M.A.L. Marques's exchange-correlation functionals for density-functional theory
 
 extra:
-  feedstock-name: libxc
+  feedstock-name: libxc-project
   recipe-maintainers:
     - bjodah
     - jan-janssen
