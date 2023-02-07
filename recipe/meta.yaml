@@ -41,7 +41,8 @@ outputs:
     files:
       - bin/xc-info                      # [unix]
       - include/*.h                      # [unix]
-      - lib/libxc{{ SHLIB_EXT }}*        # [unix]
+      - lib/libxc{{ SHLIB_EXT }}*        # [linux]
+      - lib/libxc.*dylib                 # [osx]
       - lib/cmake/Libxc/LibxcConfig*     # [unix]
       - lib/cmake/Libxc/LibxcTargets-C*  # [unix]
       - lib/pkgconfig/libxc.pc           # [unix]
@@ -131,8 +132,8 @@ outputs:
         - python
         - numpy
     files:
-      - lib/python{{ PY_VER }}/site-packages/pylibxc/*          # [unix]
-      # - Library/lib/pylibxc/*                  # [win]
+      - lib/python{{ PY_VER }}/site-packages/pylibxc/*  # [unix]
+      - Library/lib/pylibxc/*                           # [win]
     test:
       files:
         - test_pylibxc.py
