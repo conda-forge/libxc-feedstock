@@ -27,10 +27,10 @@ requirements:
     - python
 
 outputs:
-  - name: libxc-c
+  - name: libxc
     build:
       run_exports:
-        - {{ pin_subpackage('libxc-c', max_pin='x') }}
+        - {{ pin_subpackage('libxc', max_pin='x') }}
     requirements:
       build:
         - {{ compiler('c') }}
@@ -82,15 +82,15 @@ outputs:
 
   - name: libxc-f
     build:
-      skip: true  # [win]
+      skip: true                               # [win]
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ compiler('fortran') }}            # [unix]
       host:
-        - {{ pin_subpackage('libxc-c', exact=True) }}
+        - {{ pin_subpackage('libxc', exact=True) }}
       run:
-        - {{ pin_subpackage('libxc-c', exact=True) }}
+        - {{ pin_subpackage('libxc', exact=True) }}
     files:
       - include/*.mod                          # [unix]
       - lib/libxcf*{{ SHLIB_EXT }}*            # [unix]
@@ -122,13 +122,13 @@ outputs:
   - name: pylibxc
     requirements:
       build:
-        - python                                 # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
+        - python                                        # [build_platform != target_platform]
+        - cross-python_{{ target_platform }}            # [build_platform != target_platform]
       host:
-        - {{ pin_subpackage('libxc-c', exact=True) }}
+        - {{ pin_subpackage('libxc', exact=True) }}
         - python
       run:
-        - {{ pin_subpackage('libxc-c', exact=True) }}
+        - {{ pin_subpackage('libxc', exact=True) }}
         - python
         - numpy
     files:
@@ -140,11 +140,11 @@ outputs:
       files:
         - test_pylibxc.py
       commands:
-        - ls -l $SP_DIR/pylibxc                           # [unix]
-        - dir %SP_DIR%\pylibxc                            # [win]
+        - ls -l $SP_DIR/pylibxc                                 # [unix]
+        - dir %SP_DIR%\pylibxc                                  # [win]
         # Verify module
-        - test -f $SP_DIR/pylibxc/__init__.py             # [unix]
-        # add
+        - test -f $SP_DIR/pylibxc/__init__.py                   # [unix]
+        - if not exist %SP_DIR%\\pylibxc\\__init__.py exit 1    # [win]
         # Actually test
         - python test_pylibxc.py
 
