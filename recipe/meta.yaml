@@ -80,7 +80,7 @@ outputs:
         - ldd -v $PREFIX/bin/xc-info                            # [linux and build_platform == target_platform]
         - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
 
-  - name: libxc-f
+  - name: libxc
     build:
       skip: true                               # [win]
     requirements:
@@ -159,7 +159,7 @@ about:
   summary: M.A.L. Marques's exchange-correlation functionals for density-functional theory
 
 extra:
-  feedstock-name: libxc
+  feedstock-name: libxc-project
   recipe-maintainers:
     - bjodah
     - jan-janssen
