@@ -14,24 +14,17 @@ source:
 
 build:
   number: 0
-  skip: true  # [not linux and py!=39]
-
-# TODO
-# * don't skip other os
-# * don't skip other py
 
 requirements:
   build:
     - {{ compiler('c') }}
-    - {{ compiler('fortran') }}  # [linux]
+    - {{ compiler('fortran') }}  # [unix]
     - make                       # [linux]
     - cmake >=3.1
     - ninja                      # [win]
     - perl
   host:
     - python
-#  run:
-#    - python {{ python }}
 
 outputs:
   - name: libxc-c
@@ -87,10 +80,12 @@ outputs:
         - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
 
   - name: libxc-f
+    build:
+      skip: true  # [win]
     requirements:
       build:
         - {{ compiler('c') }}
-        - {{ compiler('fortran') }}
+        - {{ compiler('fortran') }}            # [unix]
       host:
         - {{ pin_subpackage('libxc-c', exact=True) }}
       run:
