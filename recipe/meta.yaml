@@ -37,7 +37,7 @@ outputs:
   - name: libxc-c
     build:
       run_exports:
-        - {{ pin_subpackage('libxc', max_pin='x') }}
+        - {{ pin_subpackage('libxc-c', max_pin='x') }}
     requirements:
       build:
         - {{ compiler('c') }}
