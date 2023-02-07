@@ -133,7 +133,7 @@ outputs:
         - numpy
     files:
       - lib/python{{ PY_VER }}/site-packages/pylibxc/*  # [unix]
-      - Library/lib/pylibxc/*                           # [win]
+      - Lib/site-packages/pylibxc/*                     # [win]
     test:
       files:
         - test_pylibxc.py

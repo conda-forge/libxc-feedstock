@@ -33,3 +33,4 @@ if errorlevel 1 exit 1
 :: tests outside build phase
 
 xcopy /f /i /s /y "%PREFIX%\Library\lib\pylibxc" "%SP_DIR%\pylibxc"
+if errorlevel 1 exit 1
