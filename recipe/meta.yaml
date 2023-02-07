@@ -137,13 +137,15 @@ outputs:
     test:
       files:
         - test_pylibxc.py
-      imports:
-        - pylibxc
       commands:
+        - ls -l $SP_DIR/pylibxc                           # [unix]
+        - dir %SP_DIR%\pylibxc                            # [win]
         # Verify module
         - test -f $SP_DIR/pylibxc/__init__.py                   # [unix]
         # Actually test
         - ${PYTHON} test_pylibxc.py
+      imports:
+        - pylibxc
 
 about:
   home: http://www.tddft.org/programs/Libxc

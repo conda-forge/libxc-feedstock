@@ -31,3 +31,5 @@ if errorlevel 1 exit 1
 ctest --output-on-failure
 if errorlevel 1 exit 1
 :: tests outside build phase
+
+xcopy /f /i /s {{ INSTALL_DIR }}\lib\pylibxc {{ SP_DIR }}\pylibxc
