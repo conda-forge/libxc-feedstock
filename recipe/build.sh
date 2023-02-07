@@ -1,6 +1,6 @@
 
 if [ "$(uname)" == "Darwin" ]; then
-    ENABLE_FORTRAN=OFF
+    ENABLE_FORTRAN=ON
 fi
 if [ "$(uname)" == "Linux" ]; then
     ENABLE_FORTRAN=ON
@@ -43,7 +43,7 @@ else
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON \
-    -DLIBXC_ENABLE_DERIV=0
+    -DLIBXC_ENABLE_DERIV=1
 fi
 
 cd build

@@ -139,8 +139,15 @@ outputs:
       - lib/python{{ PY_VER }}/site-packages/pylibxc/*          # [unix]
       # - Library/lib/pylibxc/*                  # [win]
     test:
+      files:
+        - test_pylibxc.py
       imports:
         - pylibxc
+      commands:
+        # Verify module
+        - test -f $SP_DIR/pylibxc/__init__.py                   # [unix]
+        # Actually test
+        - ${PYTHON} test_pylibxc.py
 
 about:
   home: http://www.tddft.org/programs/Libxc
