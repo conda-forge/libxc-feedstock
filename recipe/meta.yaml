@@ -14,6 +14,7 @@ source:
 
 build:
   number: 0
+  # TODO bump build/number as needed depending on merge order
 
 requirements:
   build:
@@ -27,10 +28,10 @@ requirements:
     - python
 
 outputs:
-  - name: libxc-c
+  - name: libxc
     build:
       run_exports:
-        - {{ pin_subpackage('libxc-c', max_pin='x') }}
+        - {{ pin_subpackage('libxc', max_pin='x') }}
     requirements:
       build:
         - {{ compiler('c') }}
@@ -80,7 +81,7 @@ outputs:
         - ldd -v $PREFIX/bin/xc-info                            # [linux and build_platform == target_platform]
         - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
 
-  - name: libxc
+  - name: libxc-fortran
     build:
       skip: true                               # [win]
     requirements:
@@ -88,9 +89,9 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('fortran') }}            # [unix]
       host:
-        - {{ pin_subpackage('libxc-c', exact=True) }}
+        - {{ pin_subpackage('libxc', exact=True) }}
       run:
-        - {{ pin_subpackage('libxc-c', exact=True) }}
+        - {{ pin_subpackage('libxc', exact=True) }}
     files:
       - include/*.mod                          # [unix]
       - lib/libxcf*{{ SHLIB_EXT }}*            # [unix]
@@ -125,10 +126,10 @@ outputs:
         - python                                        # [build_platform != target_platform]
         - cross-python_{{ target_platform }}            # [build_platform != target_platform]
       host:
-        - {{ pin_subpackage('libxc-c', exact=True) }}
+        - {{ pin_subpackage('libxc', exact=True) }}
         - python
       run:
-        - {{ pin_subpackage('libxc-c', exact=True) }}
+        - {{ pin_subpackage('libxc', exact=True) }}
         - python
         - numpy
     files:
@@ -159,7 +160,7 @@ about:
   summary: M.A.L. Marques's exchange-correlation functionals for density-functional theory
 
 extra:
-  feedstock-name: libxc-project
+  feedstock-name: libxc
   recipe-maintainers:
     - bjodah
     - jan-janssen
