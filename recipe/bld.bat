@@ -14,10 +14,9 @@ cmake ${CMAKE_ARGS} -G"Ninja" ^
       -DBUILD_SHARED_LIBS=ON ^
       -DENABLE_PYTHON=ON ^
       -DENABLE_XHOST=OFF ^
-      -DBUILD_TESTING=OFF
-
-      ::-DDISABLE_KXC=OFF ^
-      ::-DDISABLE_LXC=OFF
+      -DBUILD_TESTING=OFF ^
+      -DDISABLE_KXC=OFF ^
+      -DDISABLE_LXC=OFF
 
 if errorlevel 1 exit 1
 

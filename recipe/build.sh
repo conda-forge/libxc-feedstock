@@ -43,7 +43,7 @@ else
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON \
-    -DLIBXC_ENABLE_DERIV=1
+    -DLIBXC_ENABLE_DERIV=4e
 fi
 
 cd build
@@ -57,7 +57,3 @@ mkdir -p ${SP_DIR}
 mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
 
 ctest --repeat until-pass:5
-
-
-# TODO
-# * return FXC/VXC to `-DLIBXC_ENABLE_DERIV=4e`
