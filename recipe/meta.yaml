@@ -10,7 +10,7 @@ source:
   url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
   patches:
     - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
-    - 0001-treat-pylibxc-as-independent-project.patch
+    - 0002-treat-pylibxc-as-independent-project.patch
   sha256: {{ sha256 }}
 
 build:
