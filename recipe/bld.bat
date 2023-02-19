@@ -1,5 +1,5 @@
 
-cmake ${CMAKE_ARGS} -G"Ninja" ^
+cmake %CMAKE_ARGS% -G"Ninja" ^
       -H%SRC_DIR% ^
       -Bbuild ^
       -DCMAKE_BUILD_TYPE=Release ^

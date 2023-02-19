@@ -1,5 +1,5 @@
 
-cmake ${CMAKE_ARGS} ^
+cmake %CMAKE_ARGS% ^
       -G"Ninja" ^
       -S"%SRC_DIR%\pylibxc" ^
       -Bbuild_py ^
@@ -10,6 +10,7 @@ if errorlevel 1 exit 1
 
 cmake --build build_py ^
       --config Release ^
+      -v ^
       --target install
 if errorlevel 1 exit 1
 
