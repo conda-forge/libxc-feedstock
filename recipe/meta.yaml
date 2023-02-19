@@ -10,6 +10,7 @@ source:
   url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
   patches:
     - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
+    - 0001-treat-pylibxc-as-independent-project.patch
   sha256: {{ sha256 }}
 
 build:
@@ -23,8 +24,6 @@ requirements:
     - cmake >=3.1
     - ninja                      # [win]
     - perl
-  host:
-    - python
 
 outputs:
   - name: libxc-c
@@ -122,8 +121,12 @@ outputs:
         - otool -L $PREFIX/lib/libxcf03$SHLIB_EXT               # [osx]
 
   - name: pylibxc
+    script: build_py.sh                                 # [unix]
+    script: bld_py.bat                                  # [win]
     requirements:
       build:
+        - cmake
+        - ninja
         - python                                        # [build_platform != target_platform]
         - cross-python_{{ target_platform }}            # [build_platform != target_platform]
       host:
@@ -133,9 +136,10 @@ outputs:
         - {{ pin_subpackage('libxc-c', exact=True) }}
         - python
         - numpy
-    files:
-      - lib/python{{ PY_VER }}/site-packages/pylibxc/*  # [unix]
-      - Lib/site-packages/pylibxc/*                     # [win]
+    #files:
+    #  - site-packages/pylibxc/*  # [unix]
+    #  - lib/python{{ PY_VER }}/site-packages/pylibxc/*  # [unix]
+    #  - Lib/site-packages/pylibxc/*                     # [win]
     test:
       imports:
         - pylibxc

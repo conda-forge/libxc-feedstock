@@ -1,0 +1,113 @@
+From 8a7107ccfccd47ba0624945217d739ee898cba1f Mon Sep 17 00:00:00 2001
+From: "Lori A. Burns" <lori.burns@gmail.com>
+Date: Sun, 19 Feb 2023 11:53:06 -0500
+Subject: [PATCH] treat pylibxc as independent project
+
+---
+ CMakeLists.txt         | 19 +------------
+ pylibxc/CMakeLists.txt | 63 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 64 insertions(+), 18 deletions(-)
+ create mode 100644 pylibxc/CMakeLists.txt
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b3a30ee8a..af340f8fd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -585,24 +585,7 @@ if(ENABLE_FORTRAN)
+ endif()
+ 
+ if(ENABLE_PYTHON)
+-  set(SOURCE_PYTHON_API
+-    pylibxc/__init__.py
+-    pylibxc/core.py
+-    pylibxc/flags.py
+-    pylibxc/functional.py
+-    pylibxc/structs.py
+-    pylibxc/util.py
+-    pylibxc/version.py
+-  )
+-  install(
+-    FILES ${SOURCE_PYTHON_API}
+-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pylibxc
+-  )
+-  if(UNIX)
+-    install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink \
+-      ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/libxc.so.${${PROJECT_NAME}_SOMAJOR} \
+-      ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/pylibxc/libxc.so)")
+-  endif()
++    add_subdirectory(pylibxc)
+ endif()
+ 
+ export(EXPORT c_interface
+diff --git a/pylibxc/CMakeLists.txt b/pylibxc/CMakeLists.txt
+new file mode 100644
+index 000000000..5420b5425
+--- /dev/null
++++ b/pylibxc/CMakeLists.txt
+@@ -0,0 +1,63 @@
++if (CMAKE_HOST_WIN32)
++    cmake_minimum_required(VERSION 3.13)  # create_symlink for windows
++else()
++    cmake_minimum_required(VERSION 3.8)
++endif()
++cmake_policy(SET CMP0079 NEW)
++
++project(pylibxc)
++list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake)
++
++################################### Options ####################################
++include(psi4OptionsTools)
++option_with_default(PYLIBXC_INSTALL_PYMODDIR "Location within CMAKE_INSTALL_PREFIX to which the Python module is installed. Empty string queries Python interpreter" prefix)
++
++################################# Main Project #################################
++
++#  <<<  Build  >>>
++
++if (PYLIBXC_INSTALL_PYMODDIR STREQUAL "prefix")
++
++    if (NOT TARGET Python::Module)
++        find_package(Python COMPONENTS Interpreter Development REQUIRED)
++    endif()
++
++    # Note that this block is *Linux-style* install to `CMAKE_INSTALL_PREFIX` not *Python-style* install to `Python_EXECUTABLE`'s site-packages.
++
++    execute_process(
++      COMMAND ${Python_EXECUTABLE} -c
++        "import os, sys, sysconfig as s; spdir = s.get_path('platlib'); print(spdir.replace(os.path.commonpath([sys.prefix, spdir]), '').lstrip(os.path.sep));"
++      OUTPUT_VARIABLE PYLIBXC_INSTALL_PYMODDIR
++      OUTPUT_STRIP_TRAILING_WHITESPACE
++      )
++endif()
++message(STATUS "Showing option PYLIBXC_INSTALL_PYMODDIR: ${PYLIBXC_INSTALL_PYMODDIR}")
++
++if(TARGET xc)
++    get_target_property(_loc xc LOCATION)
++else()
++    find_package(Libxc REQUIRED COMPONENTS C shared)
++    get_target_property(_loc Libxc::xc LOCATION)
++endif()
++
++message("_loc ${_loc}")
++
++#  <<<  Install  >>>
++
++install(
++  FILES
++    __init__.py
++    core.py
++    flags.py
++    functional.py
++    structs.py
++    util.py
++    version.py
++  COMPONENT Libxc_Python
++  DESTINATION ${PYLIBXC_INSTALL_PYMODDIR}/pylibxc
++  )
++
++install(CODE
++  "execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${_loc} \
++     ${CMAKE_INSTALL_PREFIX}/${PYLIBXC_INSTALL_PYMODDIR}/pylibxc/libxc.so)")
++
+-- 
+2.32.0
+

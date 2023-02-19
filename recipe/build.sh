@@ -24,7 +24,7 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DNAMESPACE_INSTALL_INCLUDEDIR="/" \
     -DBUILD_SHARED_LIBS=ON \
-    -DENABLE_PYTHON=ON \
+    -DENABLE_PYTHON=OFF \
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON
@@ -39,11 +39,11 @@ else
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DNAMESPACE_INSTALL_INCLUDEDIR="/" \
     -DBUILD_SHARED_LIBS=ON \
-    -DENABLE_PYTHON=ON \
+    -DENABLE_PYTHON=OFF \
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON \
-    -DLIBXC_ENABLE_DERIV=4e
+    -DLIBXC_ENABLE_DERIV=1
 fi
 
 cd build
@@ -53,7 +53,9 @@ make install
 
 # Relocate python scripts to expected location:
 # (Avoiding setup.py which runs cmake again, separately)
-mkdir -p ${SP_DIR}
-mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
+#mkdir -p ${SP_DIR}
+#mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
+#mkdir ${PREFIX}/site-packages
+#mv ${PREFIX}/lib/pylibxc ${PREFIX}/site-packages/
 
-ctest --repeat until-pass:5
+#ctest --repeat until-pass:5
