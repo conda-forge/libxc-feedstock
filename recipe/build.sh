@@ -17,6 +17,7 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
+    -G"Ninja" \
     -DCMAKE_INSTALL_PREFIX=${PREFIX} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER=${CC} \
@@ -32,6 +33,7 @@ else
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
+    -G"Ninja" \
     -DCMAKE_INSTALL_PREFIX=${PREFIX} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER=${CC} \
@@ -46,13 +48,11 @@ else
     -DLIBXC_ENABLE_DERIV=1
 fi
 
-cd build
-make -j${CPU_COUNT}
-
-make install
+cmake --build build --target install -j${CPU_COUNT}
 
 # Relocate python scripts to expected location:
 # (Avoiding setup.py which runs cmake again, separately)
+#cd build
 #mkdir -p ${SP_DIR}
 #mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
 #mkdir ${PREFIX}/site-packages
