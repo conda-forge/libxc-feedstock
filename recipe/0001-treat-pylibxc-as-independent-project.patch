@@ -1,4 +1,4 @@
-From 8a7107ccfccd47ba0624945217d739ee898cba1f Mon Sep 17 00:00:00 2001
+From f755c5fd14520e55a902006810481df64464089e Mon Sep 17 00:00:00 2001
 From: "Lori A. Burns" <lori.burns@gmail.com>
 Date: Sun, 19 Feb 2023 11:53:06 -0500
 Subject: [PATCH] treat pylibxc as independent project
@@ -41,7 +41,7 @@ index b3a30ee8a..af340f8fd 100644
  export(EXPORT c_interface
 diff --git a/pylibxc/CMakeLists.txt b/pylibxc/CMakeLists.txt
 new file mode 100644
-index 000000000..5420b5425
+index 000000000..628a4ef64
 --- /dev/null
 +++ b/pylibxc/CMakeLists.txt
 @@ -0,0 +1,63 @@
@@ -52,7 +52,7 @@ index 000000000..5420b5425
 +endif()
 +cmake_policy(SET CMP0079 NEW)
 +
-+project(pylibxc)
++project(pylibxc LANGUAGES NONE)
 +list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake)
 +
 +################################### Options ####################################
