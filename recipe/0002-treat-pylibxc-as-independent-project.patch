@@ -1,12 +1,12 @@
-From 724b4a9236c2ca822c4cd52ff71eb6955cf342ba Mon Sep 17 00:00:00 2001
+From 34d19cd3a86278680a73b935d61fabb823805edc Mon Sep 17 00:00:00 2001
 From: "Lori A. Burns" <lori.burns@gmail.com>
 Date: Sun, 19 Feb 2023 11:53:06 -0500
 Subject: [PATCH] treat pylibxc as independent project
 
 ---
- CMakeLists.txt         | 19 +------------
- pylibxc/CMakeLists.txt | 63 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 64 insertions(+), 18 deletions(-)
+ CMakeLists.txt         | 19 +-----------
+ pylibxc/CMakeLists.txt | 65 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 66 insertions(+), 18 deletions(-)
  create mode 100644 pylibxc/CMakeLists.txt
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
@@ -41,10 +41,10 @@ index b3a30ee8a..af340f8fd 100644
  export(EXPORT c_interface
 diff --git a/pylibxc/CMakeLists.txt b/pylibxc/CMakeLists.txt
 new file mode 100644
-index 000000000..af1f933de
+index 000000000..56acbd08e
 --- /dev/null
 +++ b/pylibxc/CMakeLists.txt
-@@ -0,0 +1,63 @@
+@@ -0,0 +1,65 @@
 +if (CMAKE_HOST_WIN32)
 +    cmake_minimum_required(VERSION 3.13)  # create_symlink for windows
 +else()
@@ -104,9 +104,11 @@ index 000000000..af1f933de
 +  DESTINATION ${PYLIBXC_INSTALL_PYMODDIR}/pylibxc
 +  )
 +
-+install(CODE
-+  "execute_process(COMMAND ${CMAKE_COMMAND} -v -E create_symlink ${_loc} \
-+     ${CMAKE_INSTALL_PREFIX}/${PYLIBXC_INSTALL_PYMODDIR}/pylibxc/libxc.so)")
++if (UNIX)
++  install(CODE
++    "execute_process(COMMAND ${CMAKE_COMMAND} -v -E create_symlink ${_loc} \
++       ${CMAKE_INSTALL_PREFIX}/${PYLIBXC_INSTALL_PYMODDIR}/pylibxc/libxc.so)")
++endif()
 +
 -- 
 2.32.0

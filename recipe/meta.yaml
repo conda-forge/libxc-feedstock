@@ -134,10 +134,6 @@ outputs:
         - {{ pin_subpackage('libxc-c', exact=True) }}
         - python
         - numpy
-    #files:
-    #  - site-packages/pylibxc/*  # [unix]
-    #  - lib/python{{ PY_VER }}/site-packages/pylibxc/*  # [unix]
-    #  - Lib/site-packages/pylibxc/*                     # [win]
     test:
       imports:
         - pylibxc

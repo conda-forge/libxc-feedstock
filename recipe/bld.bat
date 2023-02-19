@@ -34,6 +34,6 @@ ctest --output-on-failure
 if errorlevel 1 exit 1
 :: tests outside build phase
 
-:::: Relocate python scripts to expected location:
+:::: If building with ENABLE_PYTHON=ON, relocate python scripts to expected location:
 ::xcopy /f /i /s /y "%PREFIX%\Library\lib\pylibxc" "%SP_DIR%\pylibxc"
 ::if errorlevel 1 exit 1

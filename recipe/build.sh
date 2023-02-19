@@ -50,12 +50,11 @@ fi
 
 cmake --build build --target install -j${CPU_COUNT}
 
-# Relocate python scripts to expected location:
+# If building with ENABLE_PYTHON=ON, relocate python scripts to expected location:
 # (Avoiding setup.py which runs cmake again, separately)
-#cd build
 #mkdir -p ${SP_DIR}
 #mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
 #mkdir ${PREFIX}/site-packages
 #mv ${PREFIX}/lib/pylibxc ${PREFIX}/site-packages/
 
-#ctest --repeat until-pass:5
+ctest --repeat until-pass:5
