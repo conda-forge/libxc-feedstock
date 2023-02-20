@@ -45,7 +45,7 @@ else
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON \
-    -DLIBXC_ENABLE_DERIV=1
+    -DLIBXC_ENABLE_DERIV=4e
 fi
 
 cmake --build build --target install -j${CPU_COUNT}
@@ -54,7 +54,5 @@ cmake --build build --target install -j${CPU_COUNT}
 # (Avoiding setup.py which runs cmake again, separately)
 #mkdir -p ${SP_DIR}
 #mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
-#mkdir ${PREFIX}/site-packages
-#mv ${PREFIX}/lib/pylibxc ${PREFIX}/site-packages/
 
 ctest --repeat until-pass:5
