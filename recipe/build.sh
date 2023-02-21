@@ -55,4 +55,6 @@ cmake --build build --target install -j${CPU_COUNT}
 #mkdir -p ${SP_DIR}
 #mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
 
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR}" != "" ]]; then
 ctest --repeat until-pass:5
+fi
