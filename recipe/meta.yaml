@@ -161,6 +161,5 @@ about:
 extra:
   feedstock-name: libxc
   recipe-maintainers:
-    - bjodah
     - jan-janssen
     - loriab
