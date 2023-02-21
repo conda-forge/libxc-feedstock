@@ -3,60 +3,150 @@
 {% set sha256 = "04dcfbdb89ab0d9ae05d8534c46edf4f9ba60dd6b7633ce72f6cb3c9773bb344" %}
 
 package:
-  name: {{ name }}
+  name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
   url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
   patches:
     - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
+    - 0002-treat-pylibxc-as-independent-project.patch
   sha256: {{ sha256 }}
 
 build:
-  number: 0
-  run_exports:
-    - {{ pin_subpackage('libxc', max_pin='x') }}
+  number: 1
 
 requirements:
   build:
     - {{ compiler('c') }}
-    - {{ compiler('fortran') }}  # [linux]
-    - make                       # [linux]
+    - {{ compiler('fortran') }}  # [unix]
     - cmake >=3.1
-    - ninja                      # [win]
+    - ninja
     - perl
-  host:
-    - python
-  run:
-    - python
 
-test:
-  commands:
-    - dir "%PREFIX%\Library"                                # [win]
-    - dir "%PREFIX%"\Library\include                        # [win]
-    - ls -l $PREFIX/lib                                     # [unix]
-    - ls -l $PREFIX/lib/cmake/Libxc                         # [unix]
-    # Verify library
-    - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
-    - test ! -f $PREFIX/lib/libxc.a                         # [unix]
-    - if not exist %PREFIX%\\Library\\lib\\xc.lib exit 1    # [win]
-    - if not exist %PREFIX%\\Library\\bin\\xc.dll exit 1    # [win]
-    - test -f $PREFIX/lib/libxcf90$SHLIB_EXT                # [linux]
-    - test -f $PREFIX/lib/libxcf03$SHLIB_EXT                # [linux]
-    # Verify accessories
-    - test -f $PREFIX/include/xc.h                          # [unix]
-    - if not exist %PREFIX%\\Library\\include\\xc.h exit 1  # [win]
-    - test -f $PREFIX/lib/cmake/Libxc/LibxcConfig.cmake     # [unix]
-    - if not exist %PREFIX%\\Library\\lib\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
-    - test -f $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
-    - test -f $PREFIX/lib/pkgconfig/libxcf90.pc             # [linux]
-    - test -f $PREFIX/lib/pkgconfig/libxcf03.pc             # [linux]
-    # Inspect linkage
-    - xc-info 100                                           # [unix]
-    - xc-info.exe 100                                       # [win]
-    - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux and build_platform == target_platform]
-    - ldd -v $PREFIX/bin/xc-info                            # [linux and build_platform == target_platform]
-    - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
+outputs:
+  - name: libxc-c
+    build:
+      run_exports:
+        - {{ pin_subpackage('libxc-c', max_pin='x') }}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - cmake
+        - ninja
+        - perl
+    files:
+      - bin/xc-info                      # [unix]
+      - include/*.h                      # [unix]
+      - lib/libxc{{ SHLIB_EXT }}*        # [linux]
+      - lib/libxc.*dylib                 # [osx]
+      - lib/cmake/Libxc/LibxcConfig*     # [unix]
+      - lib/cmake/Libxc/LibxcTargets-C*  # [unix]
+      - lib/pkgconfig/libxc.pc           # [unix]
+      - Library/include/xc*h             # [win]
+      - Library/bin/xc*                  # [win]
+      - Library/lib/xc*                  # [win]
+      - Library/lib/cmake/Libxc          # [win]
+    test:
+      commands:
+        - ls -l $PREFIX/lib                                     # [unix]
+        - ls -l $PREFIX/lib/cmake/Libxc                         # [unix]
+        - dir "%PREFIX%\Library"                                # [win]
+        - dir "%PREFIX%"\Library\include                        # [win]
+        # Verify library
+        - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
+        - test ! -f $PREFIX/lib/libxc.a                         # [unix]
+        - if not exist %PREFIX%\\Library\\lib\\xc.lib exit 1    # [win]
+        - if not exist %PREFIX%\\Library\\bin\\xc.dll exit 1    # [win]
+        - test ! -f $PREFIX/lib/libxcf90$SHLIB_EXT              # [unix]
+        - test ! -f $PREFIX/lib/libxcf03$SHLIB_EXT              # [unix]
+        # Verify accessories
+        - test -e $PREFIX/include/xc.h                          # [unix]
+        - if not exist %PREFIX%\\Library\\include\\xc.h exit 1  # [win]
+        - test -e $PREFIX/lib/cmake/Libxc/LibxcConfig.cmake     # [unix]
+        - test -e $PREFIX/lib/cmake/Libxc/LibxcTargets-C.cmake  # [unix]
+        - test ! -f $PREFIX/lib/cmake/Libxc/LibxcTargets-Fortran.cmake  # [unix]
+        - if not exist %PREFIX%\\Library\\lib\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
+        - test -e $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
+        - test ! -f $PREFIX/lib/pkgconfig/libxcf90.pc           # [unix]
+        - test ! -f $PREFIX/lib/pkgconfig/libxcf03.pc           # [unix]
+        # Inspect linkage
+        - xc-info 100                                           # [unix]
+        - xc-info.exe 100                                       # [win]
+        - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux and build_platform == target_platform]
+        - ldd -v $PREFIX/bin/xc-info                            # [linux and build_platform == target_platform]
+        - otool -L $PREFIX/lib/libxc$SHLIB_EXT                  # [osx]
+
+  - name: libxc
+    build:
+      skip: true                               # [win]
+      run_exports:
+        - {{ pin_subpackage('libxc', max_pin='x') }}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('fortran') }}            # [unix]
+      host:
+        - {{ pin_subpackage('libxc-c', exact=True) }}
+      run:
+        - {{ pin_subpackage('libxc-c', exact=True) }}
+    files:
+      - include/*.mod                          # [unix]
+      - lib/libxcf*{{ SHLIB_EXT }}*            # [unix]
+      - lib/cmake/Libxc/LibxcTargets-Fortran*  # [unix]
+      - lib/pkgconfig/libxcf*.pc               # [unix]
+    test:
+      commands:
+        # Verify library
+        - test -L $PREFIX/lib/libxc$SHLIB_EXT                   # [unix]
+        - test ! -f $PREFIX/lib/libxc.a                         # [unix]
+        - if not exist %PREFIX%\\Library\\lib\\xc.lib exit 1    # [win]
+        - if not exist %PREFIX%\\Library\\bin\\xc.dll exit 1    # [win]
+        - test -L $PREFIX/lib/libxcf90$SHLIB_EXT                # [unix]
+        - test -L $PREFIX/lib/libxcf03$SHLIB_EXT                # [unix]
+        # Verify accessories
+        - test -e $PREFIX/include/xc.h                          # [unix]
+        - if not exist %PREFIX%\\Library\\include\\xc.h exit 1  # [win]
+        - test -e $PREFIX/lib/cmake/Libxc/LibxcConfig.cmake     # [unix]
+        - test -e $PREFIX/lib/cmake/Libxc/LibxcTargets-C.cmake  # [unix]
+        - test -e $PREFIX/lib/cmake/Libxc/LibxcTargets-Fortran.cmake  # [unix]
+        - if not exist %PREFIX%\\Library\\lib\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
+        - test -e $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
+        - test -e $PREFIX/lib/pkgconfig/libxcf90.pc             # [unix]
+        - test -e $PREFIX/lib/pkgconfig/libxcf03.pc             # [unix]
+        # Inspect linkage
+        - ldd -v $PREFIX/lib/libxcf03$SHLIB_EXT                 # [linux and build_platform == target_platform]
+        - otool -L $PREFIX/lib/libxcf03$SHLIB_EXT               # [osx]
+
+  - name: pylibxc
+    script: build_py.sh                                 # [unix]
+    script: bld_py.bat                                  # [win]
+    requirements:
+      build:
+        - cmake
+        - ninja
+        - python                                        # [build_platform != target_platform]
+        - cross-python_{{ target_platform }}            # [build_platform != target_platform]
+      host:
+        - {{ pin_subpackage('libxc-c', exact=True) }}
+        - python
+      run:
+        - {{ pin_subpackage('libxc-c', exact=True) }}
+        - python
+        - numpy
+    test:
+      imports:
+        - pylibxc
+      files:
+        - test_pylibxc.py
+      commands:
+        - ls -l $SP_DIR/pylibxc                                 # [unix]
+        - dir %SP_DIR%\pylibxc                                  # [win]
+        # Verify module
+        - test -f $SP_DIR/pylibxc/__init__.py                   # [unix]
+        - if not exist %SP_DIR%\\pylibxc\\__init__.py exit 1    # [win]
+        # Actually test
+        - python test_pylibxc.py
 
 about:
   home: http://www.tddft.org/programs/Libxc
@@ -69,6 +159,7 @@ about:
   summary: M.A.L. Marques's exchange-correlation functionals for density-functional theory
 
 extra:
+  feedstock-name: libxc
   recipe-maintainers:
     - bjodah
     - jan-janssen

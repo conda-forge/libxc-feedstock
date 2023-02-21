@@ -1,6 +1,6 @@
 
 if [ "$(uname)" == "Darwin" ]; then
-    ENABLE_FORTRAN=OFF
+    ENABLE_FORTRAN=ON
 fi
 if [ "$(uname)" == "Linux" ]; then
     ENABLE_FORTRAN=ON
@@ -17,6 +17,7 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
+    -G"Ninja" \
     -DCMAKE_INSTALL_PREFIX=${PREFIX} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER=${CC} \
@@ -24,7 +25,7 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DNAMESPACE_INSTALL_INCLUDEDIR="/" \
     -DBUILD_SHARED_LIBS=ON \
-    -DENABLE_PYTHON=ON \
+    -DENABLE_PYTHON=OFF \
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON
@@ -32,6 +33,7 @@ else
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
+    -G"Ninja" \
     -DCMAKE_INSTALL_PREFIX=${PREFIX} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER=${CC} \
@@ -39,21 +41,18 @@ else
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DNAMESPACE_INSTALL_INCLUDEDIR="/" \
     -DBUILD_SHARED_LIBS=ON \
-    -DENABLE_PYTHON=ON \
+    -DENABLE_PYTHON=OFF \
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON \
     -DLIBXC_ENABLE_DERIV=4e
 fi
 
-cd build
-make -j${CPU_COUNT}
+cmake --build build --target install -j${CPU_COUNT}
 
-make install
-
-# Relocate python scripts to expected location:
+# If building with ENABLE_PYTHON=ON, relocate python scripts to expected location:
 # (Avoiding setup.py which runs cmake again, separately)
-mkdir -p ${SP_DIR}
-mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
+#mkdir -p ${SP_DIR}
+#mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
 
 ctest --repeat until-pass:5
