@@ -1,3 +1,19 @@
+#!/usr/bin/env bash
+
+set -ex
+
+if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" ]]; then
+    NVCC="$(command -v nvcc)"
+    NVCFLAGS=""
+    for arch in 60 70 80; do
+        NVCFLAGS+=" --generate-code=arch=compute_${arch},code=[compute_${arch},sm_${arch}]"
+    done
+    NVCFLAGS+=" -O3 -std=c++17 --compiler-options ${CXXFLAGS// /,}"
+    DERIV=3
+else
+    ENABLE_CUDA=OFF
+    DERIV=4e
+fi
 
 if [ "$(uname)" == "Darwin" ]; then
     ENABLE_FORTRAN=ON
@@ -22,11 +38,14 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER=${CC} \
     -DCMAKE_C_FLAGS="${CFLAGS}" \
+    -DCMAKE_CUDA_COMPILER="${NVCC}" \
+    -DCMAKE_CUDA_FLAGS="${NVCFLAGS}" \
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DNAMESPACE_INSTALL_INCLUDEDIR="/" \
     -DBUILD_SHARED_LIBS=ON \
     -DENABLE_PYTHON=OFF \
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
+    -DENABLE_CUDA=${ENABLE_CUDA} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON
 else
@@ -38,14 +57,17 @@ else
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER=${CC} \
     -DCMAKE_C_FLAGS="${CFLAGS}" \
+    -DCMAKE_CUDA_COMPILER="${NVCC}" \
+    -DCMAKE_CUDA_FLAGS="${NVCFLAGS}" \
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DNAMESPACE_INSTALL_INCLUDEDIR="/" \
     -DBUILD_SHARED_LIBS=ON \
     -DENABLE_PYTHON=OFF \
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
+    -DENABLE_CUDA=${ENABLE_CUDA} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON \
-    -DLIBXC_ENABLE_DERIV=4e
+    -DLIBXC_ENABLE_DERIV=${DERIV}
 fi
 
 cmake --build build --target install -j${CPU_COUNT}
@@ -55,4 +77,6 @@ cmake --build build --target install -j${CPU_COUNT}
 #mkdir -p ${SP_DIR}
 #mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
 
-ctest --repeat until-pass:5
+if [[ -z "${cuda_compiler_version+x}" || "${cuda_compiler_version}" == "None" ]]; then
+    ctest --repeat until-pass:5
+fi

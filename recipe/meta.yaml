@@ -1,6 +1,8 @@
 {% set name = "libxc" %}
 {% set version = "6.1.0" %}
 {% set sha256 = "04dcfbdb89ab0d9ae05d8534c46edf4f9ba60dd6b7633ce72f6cb3c9773bb344" %}
+{% set cuda_compiler_version = cuda_compiler_version or "None" %}
+{% set proc_type = "cuda_" if cuda_compiler_version != "None" else "cpu_" %}
 
 package:
   name: {{ name|lower }}-split
@@ -11,27 +13,37 @@ source:
   patches:
     - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
     - 0002-treat-pylibxc-as-independent-project.patch
+    - 0003-cmake-cuda.patch
   sha256: {{ sha256 }}
 
 build:
-  number: 1
+  number: 2
+  skip: true  # [not linux64 and cuda_compiler_version != "None"]
+  skip: true  # [linux64 and cuda_compiler_version == "10.2"]
 
 requirements:
   build:
-    - {{ compiler('c') }}
+    - {{ compiler('c') }}        # [cuda_compiler_version == "None"]
+    - {{ compiler('cxx') }}      # [cuda_compiler_version != "None"]
+    - {{ compiler('cuda') }}     # [cuda_compiler_version != "None"]
     - {{ compiler('fortran') }}  # [unix]
     - cmake >=3.1
     - ninja
     - perl
+  run:
+    - __cuda  # [cuda_compiler_version != "None"]
 
 outputs:
   - name: libxc-c
     build:
+      string: {{ proc_type }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       run_exports:
-        - {{ pin_subpackage('libxc-c', max_pin='x') }}
+        - {{ pin_subpackage('libxc-c', max_pin='x') }} {{ proc_type }}*
     requirements:
       build:
-        - {{ compiler('c') }}
+        - {{ compiler('c') }}        # [cuda_compiler_version == "None"]
+        - {{ compiler('cxx') }}      # [cuda_compiler_version != "None"]
+        - {{ compiler('cuda') }}     # [cuda_compiler_version != "None"]
         - cmake
         - ninja
         - perl
@@ -80,11 +92,14 @@ outputs:
   - name: libxc
     build:
       skip: true                               # [win]
+      string: {{ proc_type }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       run_exports:
-        - {{ pin_subpackage('libxc', max_pin='x') }}
+        - {{ pin_subpackage('libxc', max_pin='x') }} {{ proc_type }}*
     requirements:
       build:
-        - {{ compiler('c') }}
+        - {{ compiler('c') }}        # [cuda_compiler_version == "None"]
+        - {{ compiler('cxx') }}      # [cuda_compiler_version != "None"]
+        - {{ compiler('cuda') }}     # [cuda_compiler_version != "None"]
         - {{ compiler('fortran') }}            # [unix]
       host:
         - {{ pin_subpackage('libxc-c', exact=True) }}
@@ -121,6 +136,8 @@ outputs:
   - name: pylibxc
     script: build_py.sh                                 # [unix]
     script: bld_py.bat                                  # [win]
+    build:
+      string: {{ proc_type }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
     requirements:
       build:
         - cmake
