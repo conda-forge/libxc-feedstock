@@ -1,0 +1,84 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b3a30ee..3af7e5c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,6 +11,14 @@ cmake_minimum_required(VERSION 3.1)
+ set(CMAKE_C_STANDARD 99)
+ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+ 
++if(ENABLE_CUDA)
++  set(CMAKE_VERBOSE_MAKEFILE ON)
++  enable_language(CUDA)
++  if(POLICY CMP0104)
++    cmake_policy(SET CMP0104 OLD)
++  endif()
++endif()
++
+ ################################### Options ####################################
+ include(psi4OptionsTools)
+ option_with_default(CMAKE_BUILD_TYPE "Build type" Release)
+@@ -444,6 +452,10 @@ set(raw_sources_list
+ set(src_prefix "src/")
+ string(REGEX REPLACE "([^;]+)" "${src_prefix}\\1" sources_list "${raw_sources_list}")
+ 
++if(ENABLE_CUDA)
++  set_source_files_properties(${sources_list} PROPERTIES LANGUAGE CUDA)
++endif()
++
+ set(raw_sources_list_f03
+   src/libxc_master.F90
+   )
+@@ -469,6 +481,7 @@ set(CMAKE_INSTALL_RPATH ${base} ${base}/${relDir})
+ 
+ # STATIC/SHARED on below governed by BUILD_SHARED_LIBS
+ add_library(xc ${sources_list})
++set_target_properties(xc PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+ target_link_libraries(xc INTERFACE ${STANDARD_MATH_LIBRARY})
+ set_target_properties(xc PROPERTIES POSITION_INDEPENDENT_CODE ${BUILD_FPIC}
+   SOVERSION ${${PROJECT_NAME}_SOMAJOR})
+@@ -494,9 +507,15 @@ if(ENABLE_FORTRAN)
+ endif()
+ 
+ add_executable(xc-info "${src_prefix}/xc-info.c")
++if(ENABLE_CUDA)
++  set_source_files_properties("${src_prefix}/xc-info.c" PROPERTIES LANGUAGE CUDA)
++endif()
+ target_link_libraries(xc-info xc)
+ 
+ add_executable(xc-threshold "${src_prefix}/xc-threshold.c")
++if(ENABLE_CUDA)
++  set_source_files_properties("${src_prefix}/xc-threshold.c" PROPERTIES LANGUAGE CUDA)
++endif()
+ target_link_libraries(xc-threshold xc)
+ 
+ 
+diff --git a/config.h.cmake.in b/config.h.cmake.in
+index 7b151e5..816fd60 100644
+--- a/config.h.cmake.in
++++ b/config.h.cmake.in
+@@ -7,5 +7,10 @@
+ #define FC_FUNC_ FC_FUNC_GLOBAL_
+ #endif
+ 
++#cmakedefine ENABLE_CUDA @ENABLE_CUDA@
++#ifdef ENABLE_CUDA
++#define HAVE_CUDA 1
++#endif
++
+ #include <stdio.h>
+ 
+diff --git a/testsuite/CMakeLists.txt b/testsuite/CMakeLists.txt
+index 5d71933..4dd1d5c 100644
+--- a/testsuite/CMakeLists.txt
++++ b/testsuite/CMakeLists.txt
+@@ -4,6 +4,10 @@ add_executable(xc-error xc-error.c)
+ add_executable(xc-get_data xc-get_data.c)
+ add_executable(xc-regression xc-regression.c)
+ 
++if(ENABLE_CUDA)
++  set_source_files_properties(xc-consistency.c xc-error.c xc-get_data.c xc-regression.c PROPERTIES LANGUAGE CUDA)
++endif()
++
+ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/workdir)
+ set(_sdirs lda_x lda_c lda_xc lda_k gga_x gga_c gga_xc gga_k mgga_x mgga_c mgga_xc mgga_k hyb_gga_x hyb_gga_xc hyb_mgga_x hyb_mgga_xc)
+ foreach(_sdir ${_sdirs})
