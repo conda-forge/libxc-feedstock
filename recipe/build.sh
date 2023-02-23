@@ -78,5 +78,7 @@ cmake --build build --target install -j${CPU_COUNT}
 #mv ${PREFIX}/lib/pylibxc ${SP_DIR}/
 
 if [[ -z "${cuda_compiler_version+x}" || "${cuda_compiler_version}" == "None" ]]; then
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" || "${CROSSCOMPILING_EMULATOR}" != "" ]]; then
     ctest --repeat until-pass:5
+fi
 fi
