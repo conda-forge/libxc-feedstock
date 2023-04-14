@@ -1,11 +1,11 @@
-About libxc
-===========
+About libxc-feedstock
+=====================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/libxc-feedstock/blob/main/LICENSE.txt)
 
 Home: http://www.tddft.org/programs/Libxc
 
 Package license: [MPL-2.0](https://opensource.org/licenses/MPL-2.0)
-
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/libxc-feedstock/blob/main/LICENSE.txt)
 
 Summary: M.A.L. Marques's exchange-correlation functionals for density-functional theory
 
@@ -59,17 +59,17 @@ Current build status
                 </a>
               </td>
             </tr><tr>
-              <td>linux_aarch64</td>
+              <td>linux_aarch64_c_compiler_version11cuda_compiler_versionNonefortran_compiler_version11</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6303&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_c_compiler_version11cuda_compiler_versionNonefortran_compiler_version11" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_ppc64le</td>
+              <td>linux_ppc64le_c_compiler_version11cuda_compiler_versionNonefortran_compiler_version11</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6303&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_c_compiler_version11cuda_compiler_versionNonefortran_compiler_version11" alt="variant">
                 </a>
               </td>
             </tr><tr>
