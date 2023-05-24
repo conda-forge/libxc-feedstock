@@ -22,6 +22,7 @@ requirements:
     - {{ compiler('fortran') }}  # [not win]
     - libtool                    # [not win]
     - automake                   # [not win]
+    - make                       # [linux]
     - cmake                      # [win]
     - ninja                      # [win]
 
