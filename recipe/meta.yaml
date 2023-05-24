@@ -12,7 +12,7 @@ source:
 
 build:
   number: 2
-  skip: true  # [not linux]
+  skip: true  # [win]
   run_exports:
     - {{ pin_subpackage('libxc', max_pin='x.x') }}
 
