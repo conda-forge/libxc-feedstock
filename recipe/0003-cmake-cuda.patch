@@ -1,5 +1,16 @@
+From 34dbcd0da57f515196fc95d6347bd3d9cd6987b4 Mon Sep 17 00:00:00 2001
+From: "Lori A. Burns" <lori.burns@gmail.com>
+Date: Fri, 26 May 2023 19:05:48 -0400
+Subject: [PATCH] cmake cuda
+
+---
+ CMakeLists.txt           | 20 ++++++++++++++++++++
+ config.h.cmake.in        |  5 +++++
+ testsuite/CMakeLists.txt |  4 ++++
+ 3 files changed, 29 insertions(+)
+
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b3a30ee..3af7e5c 100644
+index fe18f9a99..2051f40b4 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -11,6 +11,14 @@ cmake_minimum_required(VERSION 3.1)
@@ -17,7 +28,7 @@ index b3a30ee..3af7e5c 100644
  ################################### Options ####################################
  include(psi4OptionsTools)
  option_with_default(CMAKE_BUILD_TYPE "Build type" Release)
-@@ -444,6 +452,10 @@ set(raw_sources_list
+@@ -473,6 +481,10 @@ set(raw_sources_list
  set(src_prefix "src/")
  string(REGEX REPLACE "([^;]+)" "${src_prefix}\\1" sources_list "${raw_sources_list}")
  
@@ -28,32 +39,33 @@ index b3a30ee..3af7e5c 100644
  set(raw_sources_list_f03
    src/libxc_master.F90
    )
-@@ -469,6 +481,7 @@ set(CMAKE_INSTALL_RPATH ${base} ${base}/${relDir})
+@@ -498,6 +510,7 @@ set(CMAKE_INSTALL_RPATH ${base} ${base}/${relDir})
  
  # STATIC/SHARED on below governed by BUILD_SHARED_LIBS
  add_library(xc ${sources_list})
 +set_target_properties(xc PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
- target_link_libraries(xc INTERFACE ${STANDARD_MATH_LIBRARY})
+ target_link_libraries(xc PUBLIC ${STANDARD_MATH_LIBRARY})
  set_target_properties(xc PROPERTIES POSITION_INDEPENDENT_CODE ${BUILD_FPIC}
    SOVERSION ${${PROJECT_NAME}_SOMAJOR})
-@@ -494,9 +507,15 @@ if(ENABLE_FORTRAN)
- endif()
- 
+@@ -525,9 +538,16 @@ endif()
  add_executable(xc-info "${src_prefix}/xc-info.c")
+ target_link_libraries(xc-info xc)
+ 
 +if(ENABLE_CUDA)
 +  set_source_files_properties("${src_prefix}/xc-info.c" PROPERTIES LANGUAGE CUDA)
 +endif()
- target_link_libraries(xc-info xc)
- 
++
  add_executable(xc-threshold "${src_prefix}/xc-threshold.c")
+ target_link_libraries(xc-threshold xc)
+ 
 +if(ENABLE_CUDA)
 +  set_source_files_properties("${src_prefix}/xc-threshold.c" PROPERTIES LANGUAGE CUDA)
 +endif()
- target_link_libraries(xc-threshold xc)
  
- 
+ include_directories(${PROJECT_SOURCE_DIR}/${src_prefix}  # for util.h
+   ${PROJECT_BINARY_DIR}/${src_prefix}  # for xc.h
 diff --git a/config.h.cmake.in b/config.h.cmake.in
-index 7b151e5..816fd60 100644
+index 7b151e5bf..816fd600e 100644
 --- a/config.h.cmake.in
 +++ b/config.h.cmake.in
 @@ -7,5 +7,10 @@
@@ -68,7 +80,7 @@ index 7b151e5..816fd60 100644
  #include <stdio.h>
  
 diff --git a/testsuite/CMakeLists.txt b/testsuite/CMakeLists.txt
-index 5d71933..4dd1d5c 100644
+index 5d7193380..4dd1d5ca0 100644
 --- a/testsuite/CMakeLists.txt
 +++ b/testsuite/CMakeLists.txt
 @@ -4,6 +4,10 @@ add_executable(xc-error xc-error.c)
@@ -82,3 +94,6 @@ index 5d71933..4dd1d5c 100644
  file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/workdir)
  set(_sdirs lda_x lda_c lda_xc lda_k gga_x gga_c gga_xc gga_k mgga_x mgga_c mgga_xc mgga_k hyb_gga_x hyb_gga_xc hyb_mgga_x hyb_mgga_xc)
  foreach(_sdir ${_sdirs})
+-- 
+2.34.1
+
