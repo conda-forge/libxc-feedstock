@@ -1,6 +1,6 @@
 {% set name = "libxc" %}
-{% set version = "6.1.0" %}
-{% set sha256 = "04dcfbdb89ab0d9ae05d8534c46edf4f9ba60dd6b7633ce72f6cb3c9773bb344" %}
+{% set version = "6.2.0" %}
+{% set sha256 = "ebc6b966357e7941ddfcec112fcd51bd9ab4300b87fc53753bde1b91fa6cab3f" %}
 {% set cuda_compiler_version = cuda_compiler_version or "None" %}
 {% set proc_type = "cuda_" if cuda_compiler_version != "None" else "cpu_" %}
 
@@ -17,7 +17,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 3
+  number: 0
   skip: true  # [not linux64 and cuda_compiler_version != "None"]
   skip: true  # [linux64 and cuda_compiler_version == "10.2"]
 
@@ -93,7 +93,7 @@ outputs:
 
   - name: libxc
     build:
-      skip: true                               # [win]
+      skip: true  # [win]
       string: {{ proc_type }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       run_exports:
         - {{ pin_subpackage('libxc', max_pin='x') }} {{ proc_type }}*
@@ -136,8 +136,8 @@ outputs:
         - otool -L $PREFIX/lib/libxcf03$SHLIB_EXT               # [osx]
 
   - name: pylibxc
-    script: build_py.sh                                 # [unix]
-    script: bld_py.bat                                  # [win]
+    script: build_py.sh  # [unix]
+    script: bld_py.bat  # [win]
     build:
       string: {{ proc_type }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
     requirements:
