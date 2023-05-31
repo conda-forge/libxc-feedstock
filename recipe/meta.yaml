@@ -17,7 +17,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 0
+  number: 1
   skip: true  # [not linux64 and cuda_compiler_version != "None"]
   skip: true  # [linux64 and cuda_compiler_version == "10.2"]
 
