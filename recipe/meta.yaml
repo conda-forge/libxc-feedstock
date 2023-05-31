@@ -25,6 +25,7 @@ requirements:
     - make                       # [linux]
     - cmake                      # [win]
     - ninja                      # [win]
+    - gnuconfig                  # [unix
 
 test:
   commands:
