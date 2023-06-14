@@ -1,6 +1,6 @@
 {% set name = "libxc" %}
-{% set version = "6.2.1" %}
-{% set sha256 = "fbb5a8062d82f6c0ad638a2ca83c7b0db91101343eef2cd1fe33365b282d9260" %}
+{% set version = "6.2.2" %}
+{% set sha256 = "ec292de621e819b03a37db1f7a7365a9eaf423e30e2fd4553e6336eca534cc29" %}
 {% set cuda_compiler_version = cuda_compiler_version or "None" %}
 {% set proc_type = "cuda_" if cuda_compiler_version != "None" else "cpu_" %}
 
