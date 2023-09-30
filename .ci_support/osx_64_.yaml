@@ -6,6 +6,11 @@ c_compiler_version:
 - '15'
 channel_sources:
 - conda-forge
+- conda-forge
+- conda-forge/label/python_rc,conda-forge
+- conda-forge
+- conda-forge
+- conda-forge
 channel_targets:
 - conda-forge main
 cuda_compiler_version:
@@ -25,7 +30,7 @@ pin_run_as_build:
 python:
 - 3.10.* *_cpython
 - 3.11.* *_cpython
-- 3.8.* *_73_pypy
+- 3.12.* *_cpython
 - 3.8.* *_cpython
 - 3.9.* *_73_pypy
 - 3.9.* *_cpython
@@ -34,3 +39,5 @@ target_platform:
 zip_keys:
 - - c_compiler_version
   - fortran_compiler_version
+- - python
+  - channel_sources
