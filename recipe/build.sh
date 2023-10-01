@@ -30,7 +30,7 @@ if [[ "$target_platform" == "linux-ppc64le" ]]; then
 fi
 
 if [[ "$target_platform" == "linux-aarch64" ]]; then
-    DERIV=2
+    DERIV=3
 fi
 
 if [ ${target_platform} == "linux-ppc64le" ]; then
