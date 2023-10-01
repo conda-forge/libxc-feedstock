@@ -29,6 +29,10 @@ if [[ "$target_platform" == "linux-ppc64le" ]]; then
   CXXFLAGS="$(echo $CXXFLAGS | sed 's/-fno-plt //g')"
 fi
 
+if [[ "$target_platform" == "linux-aarch64" ]]; then
+    DERIV=2
+fi
+
 if [ ${target_platform} == "linux-ppc64le" ]; then
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
