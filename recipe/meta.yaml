@@ -18,8 +18,8 @@ source:
 
 build:
   number: 2
-  skip: true  # [not linux64 and cuda_compiler_version != "None"]
-  skip: true  # [linux64 and cuda_compiler_version == "10.2"]
+  skip: true  # [not linux and cuda_compiler_version != "None"]
+  skip: true  # [linux and cuda_compiler_version == "10.2"]
 
 requirements:
   build:
