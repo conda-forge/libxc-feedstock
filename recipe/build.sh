@@ -9,6 +9,7 @@ if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" 
         NVCFLAGS+=" --generate-code=arch=compute_${arch},code=[compute_${arch},sm_${arch}]"
     done
     NVCFLAGS+=" -O3 -std=c++17 --compiler-options ${CXXFLAGS// /,}"
+    ENABLE_CUDA=ON
     DERIV=3
 else
     ENABLE_CUDA=OFF
