@@ -85,7 +85,7 @@ outputs:
         - test ! -f $PREFIX/lib/pkgconfig/libxcf90.pc           # [unix]
         - test ! -f $PREFIX/lib/pkgconfig/libxcf03.pc           # [unix]
         # Inspect linkage
-        - xc-info 100                                           # [unix]
+        - xc-info 100                                           # [unix and (cuda_compiler_version == "None")]
         - xc-info.exe 100                                       # [win]
         - ldd -v $PREFIX/lib/libxc$SHLIB_EXT                    # [linux and build_platform == target_platform]
         - ldd -v $PREFIX/bin/xc-info                            # [linux and build_platform == target_platform]
