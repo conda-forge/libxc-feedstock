@@ -165,7 +165,7 @@ outputs:
         - test -f $SP_DIR/pylibxc/__init__.py                   # [unix]
         - if not exist %SP_DIR%\\pylibxc\\__init__.py exit 1    # [win]
         # Actually test
-        - python test_pylibxc.py
+        - python test_pylibxc.py                                # [cuda_compiler_version == "None"]
 
 about:
   home: http://www.tddft.org/programs/Libxc
