@@ -11,6 +11,9 @@ if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" 
     NVCFLAGS+=" -O3 -std=c++17 --compiler-options ${CXXFLAGS// /,}"
     ENABLE_CUDA=ON
     DERIV=2
+elif [[ "$target_platform" == "linux-aarch64" ]]; then
+    ENABLE_CUDA=OFF
+    DERIV=3
 else
     ENABLE_CUDA=OFF
     DERIV=4e
@@ -28,10 +31,6 @@ fi
 if [[ "$target_platform" == "linux-ppc64le" ]]; then
   CFLAGS="$(echo $CFLAGS | sed 's/-fno-plt //g')"
   CXXFLAGS="$(echo $CXXFLAGS | sed 's/-fno-plt //g')"
-fi
-
-if [[ "$target_platform" == "linux-aarch64" ]]; then
-    DERIV=3
 fi
 
 if [ ${target_platform} == "linux-ppc64le" ]; then
