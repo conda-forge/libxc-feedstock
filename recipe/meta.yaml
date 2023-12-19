@@ -17,8 +17,8 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 3
-  skip: true  # [not linux64 and cuda_compiler_version != "None"]
+  number: 4
+  skip: true  # [not linux and cuda_compiler_version != "None"]
 
 requirements:
   build:
@@ -38,6 +38,11 @@ outputs:
   - name: libxc-c
     build:
       string: {{ proc_type }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+      ignore_run_exports_from:
+        # `libxc` is C only. So ignore `libstdcxx-ng`
+        - libstdcxx-ng               # [cuda_compiler_version != "None"]
+        # Ignore `cudatoolkit` dependency in CUDA 11 builds
+        - {{ compiler("cuda") }}     # [(cuda_compiler_version or "").startswith("11")]
       run_exports:
         - {{ pin_subpackage('libxc-c', max_pin='x') }} {{ proc_type }}*
     requirements:
@@ -48,6 +53,10 @@ outputs:
         - cmake
         - ninja
         - perl
+      host:
+        - cuda-version ={{ cuda_compiler_version }}          # [(cuda_compiler_version or "").startswith("11")]
+      run:
+        - {{ pin_compatible("cuda-version", max_pin="x") }}  # [(cuda_compiler_version or "").startswith("11")]
     files:
       - bin/xc-info                      # [unix]
       - include/*.h                      # [unix]
@@ -94,6 +103,11 @@ outputs:
     build:
       skip: true  # [win]
       string: {{ proc_type }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+      ignore_run_exports_from:
+        # `libxc` is C only. So ignore `libstdcxx-ng`
+        - libstdcxx-ng               # [cuda_compiler_version != "None"]
+        # Ignore `cudatoolkit` dependency in CUDA 11 builds
+        - {{ compiler("cuda") }}     # [(cuda_compiler_version or "").startswith("11")]
       run_exports:
         - {{ pin_subpackage('libxc', max_pin='x') }} {{ proc_type }}*
     requirements:
@@ -104,8 +118,10 @@ outputs:
         - {{ compiler('fortran') }}            # [unix]
       host:
         - {{ pin_subpackage('libxc-c', exact=True) }}
+        - cuda-version ={{ cuda_compiler_version }}          # [(cuda_compiler_version or "").startswith("11")]
       run:
         - {{ pin_subpackage('libxc-c', exact=True) }}
+        - {{ pin_compatible("cuda-version", max_pin="x") }}  # [(cuda_compiler_version or "").startswith("11")]
     files:
       - include/*.mod                          # [unix]
       - lib/libxcf*{{ SHLIB_EXT }}*            # [unix]

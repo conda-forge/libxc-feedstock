@@ -1,4 +1,5 @@
 azure:
+  free_disk_space: true
   store_build_artifacts: false
 build_platform:
   linux_aarch64: linux_64
@@ -6,6 +7,7 @@ build_platform:
   osx_arm64: osx_64
 conda_build:
   pkg_format: '2'
+  error_overlinking: true
 conda_forge_output_validation: true
 github:
   branch_name: main
