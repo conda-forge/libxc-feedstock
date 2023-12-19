@@ -103,8 +103,9 @@ outputs:
       skip: true  # [win]
       string: {{ proc_type }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       ignore_run_exports_from:
+        # `libxc` is C only. So ignore `libstdcxx-ng`
+        - {{ compiler("cxx") }}      # [cuda_compiler_version != "None"]
         # Ignore `cudatoolkit` dependency in CUDA 11 builds
-        - {{ compiler("cxx") }}      # [(cuda_compiler_version or "").startswith("11")]
         - {{ compiler("cuda") }}     # [(cuda_compiler_version or "").startswith("11")]
       run_exports:
         - {{ pin_subpackage('libxc', max_pin='x') }} {{ proc_type }}*
