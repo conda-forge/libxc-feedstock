@@ -1,6 +1,5 @@
 {% set name = "libxc" %}
 {% set version = "6.2.2" %}
-{% set sha256 = "ec292de621e819b03a37db1f7a7365a9eaf423e30e2fd4553e6336eca534cc29" %}
 {% set cuda_compiler_version = cuda_compiler_version or "None" %}
 {% set proc_type = "cuda_" if cuda_compiler_version != "None" else "cpu_" %}
 
@@ -14,7 +13,7 @@ source:
     - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
     - 0002-treat-pylibxc-as-independent-project.patch
     - 0003-cmake-cuda.patch
-  sha256: {{ sha256 }}
+  sha256: f72ed08af7b9dff5f57482c5f97bff22c7dc49da9564bc93871997cbda6dacf3
 
 build:
   number: 5
