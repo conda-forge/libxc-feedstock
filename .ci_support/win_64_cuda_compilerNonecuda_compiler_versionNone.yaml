@@ -4,12 +4,10 @@ c_stdlib:
 - vs
 channel_sources:
 - conda-forge
-- conda-forge
-- conda-forge
-- conda-forge/label/python_rc,conda-forge
-- conda-forge
 channel_targets:
 - conda-forge main
+cuda_compiler:
+- None
 cuda_compiler_version:
 - None
 perl:
@@ -27,5 +25,5 @@ python:
 target_platform:
 - win-64
 zip_keys:
-- - python
-  - channel_sources
+- - cuda_compiler
+  - cuda_compiler_version
