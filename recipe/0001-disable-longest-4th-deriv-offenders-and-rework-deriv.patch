@@ -114,8 +114,8 @@ index ada562e..802ace3 100644
  # ::
  #
  #   find_package(Libxc)
--#   find_package(Libxc 5.1.0 EXACT CONFIG REQUIRED COMPONENTS shared C)
-+#   find_package(Libxc 6.0.0 EXACT CONFIG REQUIRED COMPONENTS shared C xc_d2)
+-#   find_package(Libxc 6.0.0 EXACT CONFIG REQUIRED COMPONENTS shared C)
++#   find_package(Libxc 7.0.0 EXACT CONFIG REQUIRED COMPONENTS shared C xc_d2)
  #
  #
  # The following variables can be set to guide the search for this package:
