@@ -136,7 +136,6 @@ outputs:
         - test ! -f $PREFIX/lib/libxc.a                         # [unix]
         - if not exist %PREFIX%\\Library\\lib\\xc.lib exit 1    # [win]
         - if not exist %PREFIX%\\Library\\bin\\xc.dll exit 1    # [win]
-        - test -L $PREFIX/lib/libxcf90$SHLIB_EXT                # [unix]
         - test -L $PREFIX/lib/libxcf03$SHLIB_EXT                # [unix]
         # Verify accessories
         - test -e $PREFIX/include/xc.h                          # [unix]
@@ -146,7 +145,6 @@ outputs:
         - test -e $PREFIX/lib/cmake/Libxc/LibxcTargets-Fortran.cmake  # [unix]
         - if not exist %PREFIX%\\Library\\lib\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
         - test -e $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
-        - test -e $PREFIX/lib/pkgconfig/libxcf90.pc             # [unix]
         - test -e $PREFIX/lib/pkgconfig/libxcf03.pc             # [unix]
         # Inspect linkage
         - ldd -v $PREFIX/lib/libxcf03$SHLIB_EXT                 # [linux and build_platform == target_platform]
