@@ -1,5 +1,5 @@
 {% set name = "libxc" %}
-{% set version = "6.2.2" %}
+{% set version = "7.0.0" %}
 {% set cuda_compiler_version = cuda_compiler_version or "None" %}
 {% set proc_type = "cuda_" if cuda_compiler_version != "None" else "cpu_" %}
 
@@ -12,11 +12,11 @@ source:
   patches:
     - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
     - 0002-treat-pylibxc-as-independent-project.patch
-    - 0003-cmake-cuda.patch
-  sha256: f72ed08af7b9dff5f57482c5f97bff22c7dc49da9564bc93871997cbda6dacf3
+    # incorporated into v7.0.0 - 0003-cmake-cuda.patch
+  sha256: e9ae69f8966d8de6b7585abd9fab588794ada1fab8f689337959a35abbf9527d
 
 build:
-  number: 6
+  number: 0
   skip: true  # [not linux and cuda_compiler_version != "None"]
 
 requirements:
@@ -136,7 +136,6 @@ outputs:
         - test ! -f $PREFIX/lib/libxc.a                         # [unix]
         - if not exist %PREFIX%\\Library\\lib\\xc.lib exit 1    # [win]
         - if not exist %PREFIX%\\Library\\bin\\xc.dll exit 1    # [win]
-        - test -L $PREFIX/lib/libxcf90$SHLIB_EXT                # [unix]
         - test -L $PREFIX/lib/libxcf03$SHLIB_EXT                # [unix]
         # Verify accessories
         - test -e $PREFIX/include/xc.h                          # [unix]
@@ -146,7 +145,6 @@ outputs:
         - test -e $PREFIX/lib/cmake/Libxc/LibxcTargets-Fortran.cmake  # [unix]
         - if not exist %PREFIX%\\Library\\lib\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
         - test -e $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
-        - test -e $PREFIX/lib/pkgconfig/libxcf90.pc             # [unix]
         - test -e $PREFIX/lib/pkgconfig/libxcf03.pc             # [unix]
         # Inspect linkage
         - ldd -v $PREFIX/lib/libxcf03$SHLIB_EXT                 # [linux and build_platform == target_platform]
