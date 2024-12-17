@@ -16,7 +16,7 @@ source:
   sha256: e9ae69f8966d8de6b7585abd9fab588794ada1fab8f689337959a35abbf9527d
 
 build:
-  number: 0
+  number: 1
   skip: true  # [not linux and cuda_compiler_version != "None"]
 
 requirements:
@@ -27,7 +27,7 @@ requirements:
     - {{ compiler('c') }}        # [cuda_compiler_version == "None"]
     - {{ compiler('cxx') }}      # [cuda_compiler_version != "None"]
     - {{ compiler('cuda') }}     # [cuda_compiler_version != "None"]
-    - {{ compiler('fortran') }}  # [unix]
+    - {{ compiler("fortran") }}
     - cmake >=3.1
     - ninja
     - perl
@@ -117,7 +117,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}      # [cuda_compiler_version != "None"]
         - {{ compiler('cuda') }}     # [cuda_compiler_version != "None"]
-        - {{ compiler('fortran') }}            # [unix]
+        - {{ compiler("fortran") }}
       host:
         - {{ pin_subpackage('libxc-c', exact=True) }}
         - cuda-version ={{ cuda_compiler_version }}          # [(cuda_compiler_version or "").startswith("11")]
