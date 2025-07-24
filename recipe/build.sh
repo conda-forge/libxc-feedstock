@@ -51,6 +51,7 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
     -DENABLE_CUDA=${ENABLE_CUDA} \
     -DENABLE_XHOST=OFF \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.10 \
     -DBUILD_TESTING=ON
 else
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
@@ -71,6 +72,7 @@ else
     -DENABLE_CUDA=${ENABLE_CUDA} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.10 \
     -DLIBXC_ENABLE_DERIV=${DERIV}
 fi
 
