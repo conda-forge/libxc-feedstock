@@ -8,8 +8,10 @@ if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" 
 
     if [[ "$target_platform" == "linux-ppc64le" ]]; then
         ARCHES=(60 70 80)  # ppc64le on 12.4
+    elif [[ "$target_platform" == "linux-aarch64" ]]; then
+        ARCHES=(   70 80 100 120)  # others >=12.8, oom w/5 arches
     else
-        ARCHES=(60 70 80 100 120)  # others >=12.8
+        ARCHES=(   70 80 100    )  # others >=12.8
     fi
 
     for arch in "${ARCHES[@]}"; do
@@ -44,7 +46,6 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
-    -G"Ninja" \
     -DCMAKE_INSTALL_PREFIX=${PREFIX} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER=${CC} \
@@ -61,11 +62,9 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
     -DCMAKE_POLICY_VERSION_MINIMUM=3.10 \
     -DBUILD_TESTING=ON
 else
-  export CMAKE_BUILD_PARALLEL_LEVEL=1
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
-    -G"Ninja" \
     -DCMAKE_INSTALL_PREFIX=${PREFIX} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER=${CC} \
@@ -84,7 +83,7 @@ else
     -DLIBXC_ENABLE_DERIV=${DERIV}
 fi
 
-cmake --build build --target install -j${CPU_COUNT}
+cmake --build build --target install
 
 # If building with ENABLE_PYTHON=ON, relocate python scripts to expected location:
 # (Avoiding setup.py which runs cmake again, separately)

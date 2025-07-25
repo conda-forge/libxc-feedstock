@@ -30,6 +30,7 @@ requirements:
     - {{ compiler("fortran") }}
     - cmake >=3.1
     - ninja
+    - make                       # [unix]
     - perl
   run:
     - __cuda  # [cuda_compiler_version != "None"]
@@ -52,7 +53,8 @@ outputs:
         - {{ compiler('cxx') }}      # [cuda_compiler_version != "None"]
         - {{ compiler('cuda') }}     # [cuda_compiler_version != "None"]
         - cmake
-        - ninja
+        - ninja                      # [win]
+        - make                       # [unix]
         - perl
       host:
         - cuda-version ={{ cuda_compiler_version }}          # [(cuda_compiler_version or "").startswith("11")]
