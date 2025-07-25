@@ -5,7 +5,14 @@ set -ex
 if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" ]]; then
     NVCC="$(command -v nvcc)"
     NVCFLAGS=""
-    for arch in 60 70 80 100 120; do
+
+    if [[ "$target_platform" == "linux-ppc64le" ]]; then
+        ARCHES=(60 70 80)  # ppc64le on 12.4
+    else
+        ARCHES=(60 70 80 100 120)  # others >=12.8
+    fi
+
+    for arch in "${ARCHES[@]}"; do
         NVCFLAGS+=" --generate-code=arch=compute_${arch},code=[compute_${arch},sm_${arch}]"
     done
     NVCFLAGS+=" -O3 -std=c++17 --compiler-options ${CXXFLAGS// /,}"
@@ -54,7 +61,7 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
     -DCMAKE_POLICY_VERSION_MINIMUM=3.10 \
     -DBUILD_TESTING=ON
 else
-  export CMAKE_BUILD_PARALLEL_LEVEL=2
+  export CMAKE_BUILD_PARALLEL_LEVEL=1
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
