@@ -6,12 +6,13 @@ if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" 
     NVCC="$(command -v nvcc)"
     NVCFLAGS=""
 
+    # A good balance between broad support and storage footprint (resp. compilation time) is to add sm_100 and sm_120.
     if [[ "$target_platform" == "linux-ppc64le" ]]; then
-        ARCHES=(60 70 80)  # ppc64le on 12.4
+        ARCHES=(70 80    )  # ppc64le on 12.4
     elif [[ "$target_platform" == "linux-aarch64" ]]; then
-        ARCHES=(   70 80 100 120)  # others >=12.8, oom w/5 arches
+        ARCHES=(70 80 100)  # others >=12.8, oom w/5 arches
     else
-        ARCHES=(   70 80 100    )  # others >=12.8
+        ARCHES=(70 80 100)  # others >=12.8
     fi
 
     for arch in "${ARCHES[@]}"; do
@@ -83,7 +84,7 @@ else
     -DLIBXC_ENABLE_DERIV=${DERIV}
 fi
 
-cmake --build build --target install
+cmake --build build --target install -j2
 
 # If building with ENABLE_PYTHON=ON, relocate python scripts to expected location:
 # (Avoiding setup.py which runs cmake again, separately)
