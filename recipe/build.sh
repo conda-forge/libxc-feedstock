@@ -64,6 +64,7 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
     -DCMAKE_POLICY_VERSION_MINIMUM=3.10 \
     -DBUILD_TESTING=ON
 else
+  export CMAKE_BUILD_PARALLEL_LEVEL=2
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
