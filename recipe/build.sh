@@ -47,6 +47,7 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
+    -G"Ninja" \
     -DCMAKE_INSTALL_PREFIX=${PREFIX} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER=${CC} \
@@ -66,6 +67,7 @@ else
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
+    -G"Ninja" \
     -DCMAKE_INSTALL_PREFIX=${PREFIX} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_COMPILER=${CC} \
@@ -84,7 +86,7 @@ else
     -DLIBXC_ENABLE_DERIV=${DERIV}
 fi
 
-cmake --build build --target install -j2
+cmake --build build --target install
 
 # If building with ENABLE_PYTHON=ON, relocate python scripts to expected location:
 # (Avoiding setup.py which runs cmake again, separately)
