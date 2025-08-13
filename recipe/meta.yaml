@@ -16,7 +16,7 @@ source:
   sha256: e9ae69f8966d8de6b7585abd9fab588794ada1fab8f689337959a35abbf9527d
 
 build:
-  number: 2
+  number: 3
   skip: true  # [not linux and cuda_compiler_version != "None"]
 
 requirements:
@@ -28,7 +28,7 @@ requirements:
     - {{ compiler('cxx') }}      # [cuda_compiler_version != "None"]
     - {{ compiler('cuda') }}     # [cuda_compiler_version != "None"]
     - {{ compiler("fortran") }}
-    - cmake >=3.1
+    - cmake
     - ninja
     - perl
   run:

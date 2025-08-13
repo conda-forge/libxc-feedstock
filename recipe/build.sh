@@ -5,7 +5,17 @@ set -ex
 if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" ]]; then
     NVCC="$(command -v nvcc)"
     NVCFLAGS=""
-    for arch in 60 70 80; do
+
+    # A good balance between broad support and storage footprint (resp. compilation time) is to add sm_100 and sm_120.
+    if [[ "$target_platform" == "linux-ppc64le" ]]; then
+        ARCHES=(70 80    )  # ppc64le on 12.4
+    elif [[ "$target_platform" == "linux-aarch64" ]]; then
+        ARCHES=(70 80 100)  # others >=12.8, oom w/5 arches
+    else
+        ARCHES=(70 80 100)  # others >=12.8
+    fi
+
+    for arch in "${ARCHES[@]}"; do
         NVCFLAGS+=" --generate-code=arch=compute_${arch},code=[compute_${arch},sm_${arch}]"
     done
     NVCFLAGS+=" -O3 -std=c++17 --compiler-options ${CXXFLAGS// /,}"
@@ -51,8 +61,10 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
     -DENABLE_FORTRAN=${ENABLE_FORTRAN} \
     -DENABLE_CUDA=${ENABLE_CUDA} \
     -DENABLE_XHOST=OFF \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.10 \
     -DBUILD_TESTING=ON
 else
+  export CMAKE_BUILD_PARALLEL_LEVEL=2
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
     -H${SRC_DIR} \
     -Bbuild \
@@ -71,10 +83,11 @@ else
     -DENABLE_CUDA=${ENABLE_CUDA} \
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.10 \
     -DLIBXC_ENABLE_DERIV=${DERIV}
 fi
 
-cmake --build build --target install -j${CPU_COUNT}
+cmake --build build --target install
 
 # If building with ENABLE_PYTHON=ON, relocate python scripts to expected location:
 # (Avoiding setup.py which runs cmake again, separately)

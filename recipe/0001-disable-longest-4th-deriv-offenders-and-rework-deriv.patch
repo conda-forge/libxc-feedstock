@@ -83,7 +83,7 @@ index b3a30ee..023f899 100644
 +    src/mgga_x_br89.c
 +    src/mgga_x_mbrxh_bg.c
 +    src/mgga_x_mbrxc_bg.c
-+    # src/mgga_x_mggac.c
++    src/mgga_x_mggac.c
 +    PROPERTIES
 +      COMPILE_DEFINITIONS
 +        XC_DONT_COMPILE_LXC
