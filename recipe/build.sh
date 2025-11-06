@@ -8,11 +8,11 @@ if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" 
 
     # A good balance between broad support and storage footprint (resp. compilation time) is to add sm_100 and sm_120.
     if [[ "$target_platform" == "linux-ppc64le" ]]; then
-        CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_CUDA_ARCHITECTURES=70;80"
+        CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_CUDA_ARCHITECTURES=80;100"
     elif [[ "$target_platform" == "linux-aarch64" ]]; then
-        CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_CUDA_ARCHITECTURES=70;80;100"
+        CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_CUDA_ARCHITECTURES=80;100;120"
     else
-        CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_CUDA_ARCHITECTURES=70;80;100"
+        CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_CUDA_ARCHITECTURES=80;100;120"
     fi
 
     NVCFLAGS+=" -O3 -std=c++17 --compiler-options ${CXXFLAGS// /,}"
