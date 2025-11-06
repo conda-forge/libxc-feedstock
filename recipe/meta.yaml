@@ -41,7 +41,7 @@ outputs:
       string: {{ proc_type }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       ignore_run_exports_from:
         # `libxc` is C only. So ignore cxx-only run-exports
-        - {{ compiler("cxx") }}      # [cuda_compiler_version != "None"]
+        - {{ compiler("cxx") }}      # [(cuda_compiler_version != "None") and (cuda_compiler_version.startswith("12"))]
         # Ignore `cudatoolkit` dependency in CUDA 11 builds
         - {{ compiler("cuda") }}     # [(cuda_compiler_version or "").startswith("11")]
       run_exports:
