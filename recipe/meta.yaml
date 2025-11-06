@@ -13,6 +13,7 @@ source:
     - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
     - 0002-treat-pylibxc-as-independent-project.patch
     # incorporated into v7.0.0 - 0003-cmake-cuda.patch
+    - 0004-windows-interface-include-fix.patch
   sha256: e9ae69f8966d8de6b7585abd9fab588794ada1fab8f689337959a35abbf9527d
 
 build:
