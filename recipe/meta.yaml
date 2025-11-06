@@ -18,8 +18,7 @@ source:
 
 build:
   number: 5
-  #skip: true  # [not linux and cuda_compiler_version != "None"]
-  skip: true  # [not win]
+  skip: true  # [not linux and cuda_compiler_version != "None"]
 
 requirements:
   build:
@@ -186,9 +185,9 @@ outputs:
         - python test_pylibxc.py                                # [cuda_compiler_version == "None"]
 
 about:
-  home: http://www.tddft.org/programs/Libxc
+  home: https://gitlab.com/libxc/libxc
   dev_url: https://gitlab.com/libxc/libxc
-  doc_url: https://www.tddft.org/programs/libxc/manual/
+  doc_url: https://libxc.gitlab.io/
   license: MPL-2.0
   license_url: https://opensource.org/licenses/MPL-2.0
   license_file: COPYING
