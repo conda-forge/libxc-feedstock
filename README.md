@@ -3,7 +3,7 @@ About libxc-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/libxc-feedstock/blob/main/LICENSE.txt)
 
-Home: http://www.tddft.org/programs/Libxc
+Home: https://gitlab.com/libxc/libxc
 
 Package license: [MPL-2.0](https://opensource.org/licenses/MPL-2.0)
 
@@ -11,7 +11,7 @@ Summary: M.A.L. Marques's exchange-correlation functionals for density-functiona
 
 Development: https://gitlab.com/libxc/libxc
 
-Documentation: https://www.tddft.org/programs/libxc/manual/
+Documentation: https://libxc.gitlab.io/
 
 Current build status
 ====================
@@ -31,10 +31,52 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
-              <td>win_64_cuda_compiler_version12.9</td>
+              <td>linux_64_cuda_compiler_version12.9</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6303&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=win&configuration=win%20win_64_cuda_compiler_version12.9" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_cuda_compiler_version12.9" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_64_cuda_compiler_versionNone</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6303&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_cuda_compiler_versionNone" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_aarch64_cuda_compiler_version12.9</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6303&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_cuda_compiler_version12.9" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_aarch64_cuda_compiler_versionNone</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6303&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_cuda_compiler_versionNone" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_ppc64le</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6303&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6303&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=6303&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/libxc-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_" alt="variant">
                 </a>
               </td>
             </tr><tr>
@@ -57,6 +99,7 @@ Current release info
 
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libxc-green.svg)](https://anaconda.org/conda-forge/libxc) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libxc.svg)](https://anaconda.org/conda-forge/libxc) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libxc.svg)](https://anaconda.org/conda-forge/libxc) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libxc.svg)](https://anaconda.org/conda-forge/libxc) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libxc--c-green.svg)](https://anaconda.org/conda-forge/libxc-c) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libxc-c.svg)](https://anaconda.org/conda-forge/libxc-c) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libxc-c.svg)](https://anaconda.org/conda-forge/libxc-c) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libxc-c.svg)](https://anaconda.org/conda-forge/libxc-c) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-pylibxc-green.svg)](https://anaconda.org/conda-forge/pylibxc) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pylibxc.svg)](https://anaconda.org/conda-forge/pylibxc) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pylibxc.svg)](https://anaconda.org/conda-forge/pylibxc) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pylibxc.svg)](https://anaconda.org/conda-forge/pylibxc) |
 
@@ -70,41 +113,41 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libxc-c, pylibxc` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libxc, libxc-c, pylibxc` can be installed with `conda`:
 
 ```
-conda install libxc-c pylibxc
-```
-
-or with `mamba`:
-
-```
-mamba install libxc-c pylibxc
-```
-
-It is possible to list all of the versions of `libxc-c` available on your platform with `conda`:
-
-```
-conda search libxc-c --channel conda-forge
+conda install libxc libxc-c pylibxc
 ```
 
 or with `mamba`:
 
 ```
-mamba search libxc-c --channel conda-forge
+mamba install libxc libxc-c pylibxc
+```
+
+It is possible to list all of the versions of `libxc` available on your platform with `conda`:
+
+```
+conda search libxc --channel conda-forge
+```
+
+or with `mamba`:
+
+```
+mamba search libxc --channel conda-forge
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search libxc-c --channel conda-forge
+mamba repoquery search libxc --channel conda-forge
 
-# List packages depending on `libxc-c`:
-mamba repoquery whoneeds libxc-c --channel conda-forge
+# List packages depending on `libxc`:
+mamba repoquery whoneeds libxc --channel conda-forge
 
-# List dependencies of `libxc-c`:
-mamba repoquery depends libxc-c --channel conda-forge
+# List dependencies of `libxc`:
+mamba repoquery depends libxc --channel conda-forge
 ```
 
 
