@@ -1,0 +1,27 @@
+From caef0d98e8771653e9385fa096f6e31f7e3bea37 Mon Sep 17 00:00:00 2001
+From: "Lori A. Burns" <lori.burns@gmail.com>
+Date: Wed, 5 Nov 2025 22:27:27 -0500
+Subject: [PATCH] windows interface include fix
+
+---
+ CMakeLists.txt | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 27f941de7..35d6fa775 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -579,8 +579,9 @@ endif()
+ # <<<  Export Interface  >>>
+ 
+ target_compile_definitions(xc INTERFACE USING_${PN})
++file(TO_CMAKE_PATH "${CMAKE_INSTALL_INCLUDEDIR}${NAMESPACE_INSTALL_INCLUDEDIR}" _forward_slash_iid)
+ target_include_directories(xc INTERFACE
+-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}${NAMESPACE_INSTALL_INCLUDEDIR}>)
++  $<INSTALL_INTERFACE:${_forward_slash_iid}>)
+ 
+ # <<<  Export Config  >>>
+ 
+-- 
+2.40.1
+

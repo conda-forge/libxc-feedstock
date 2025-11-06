@@ -13,10 +13,11 @@ source:
     - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
     - 0002-treat-pylibxc-as-independent-project.patch
     # incorporated into v7.0.0 - 0003-cmake-cuda.patch
+    - 0004-windows-interface-include-fix.patch
   sha256: e9ae69f8966d8de6b7585abd9fab588794ada1fab8f689337959a35abbf9527d
 
 build:
-  number: 4
+  number: 5
   skip: true  # [not linux and cuda_compiler_version != "None"]
 
 requirements:
@@ -90,6 +91,7 @@ outputs:
         - test -e $PREFIX/lib/cmake/Libxc/LibxcTargets-C.cmake  # [unix]
         - test ! -f $PREFIX/lib/cmake/Libxc/LibxcTargets-Fortran.cmake  # [unix]
         - if not exist %PREFIX%\\Library\\lib\\cmake\\Libxc\\LibxcConfig.cmake exit 1  # [win]
+        - type %PREFIX%\\Library\\lib\\cmake\\Libxc\\LibxcTargets-C.cmake  # [win]
         - test -e $PREFIX/lib/pkgconfig/libxc.pc                # [unix]
         - test ! -f $PREFIX/lib/pkgconfig/libxcf90.pc           # [unix]
         - test ! -f $PREFIX/lib/pkgconfig/libxcf03.pc           # [unix]
@@ -183,9 +185,9 @@ outputs:
         - python test_pylibxc.py                                # [cuda_compiler_version == "None"]
 
 about:
-  home: http://www.tddft.org/programs/Libxc
+  home: https://gitlab.com/libxc/libxc
   dev_url: https://gitlab.com/libxc/libxc
-  doc_url: https://www.tddft.org/programs/libxc/manual/
+  doc_url: https://libxc.gitlab.io/
   license: MPL-2.0
   license_url: https://opensource.org/licenses/MPL-2.0
   license_file: COPYING

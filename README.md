@@ -3,7 +3,7 @@ About libxc-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/libxc-feedstock/blob/main/LICENSE.txt)
 
-Home: http://www.tddft.org/programs/Libxc
+Home: https://gitlab.com/libxc/libxc
 
 Package license: [MPL-2.0](https://opensource.org/licenses/MPL-2.0)
 
@@ -11,7 +11,7 @@ Summary: M.A.L. Marques's exchange-correlation functionals for density-functiona
 
 Development: https://gitlab.com/libxc/libxc
 
-Documentation: https://www.tddft.org/programs/libxc/manual/
+Documentation: https://libxc.gitlab.io/
 
 Current build status
 ====================
