@@ -17,7 +17,7 @@ source:
   sha256: e9ae69f8966d8de6b7585abd9fab588794ada1fab8f689337959a35abbf9527d
 
 build:
-  number: 5
+  number: 6
   skip: true  # [not linux and cuda_compiler_version != "None"]
 
 requirements:
@@ -41,7 +41,7 @@ outputs:
       string: {{ proc_type }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       ignore_run_exports_from:
         # `libxc` is C only. So ignore cxx-only run-exports
-        - {{ compiler("cxx") }}      # [cuda_compiler_version != "None"]
+        - {{ compiler("cxx") }}      # [(cuda_compiler_version != "None") and ((cuda_compiler_version or "").startswith("12"))]
         # Ignore `cudatoolkit` dependency in CUDA 11 builds
         - {{ compiler("cuda") }}     # [(cuda_compiler_version or "").startswith("11")]
       run_exports:
