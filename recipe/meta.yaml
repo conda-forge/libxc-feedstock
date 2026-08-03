@@ -57,6 +57,7 @@ outputs:
         - perl
       host:
         - cuda-version ={{ cuda_compiler_version }}          # [(cuda_compiler_version or "").startswith("11")]
+        - pytest                                             # [unix]
       run:
         - {{ pin_compatible("cuda-version", max_pin="x") }}  # [(cuda_compiler_version or "").startswith("11")]
     files:
