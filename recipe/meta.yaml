@@ -11,9 +11,9 @@ source:
   url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
   patches:
     # - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
-    - 0002-treat-pylibxc-as-independent-project.patch
+    # - 0002-treat-pylibxc-as-independent-project.patch
     # incorporated into v7.0.0 - 0003-cmake-cuda.patch
-    - 0004-windows-interface-include-fix.patch
+    # - 0004-windows-interface-include-fix.patch
   sha256: 3915fac94416e4c415534223ea492ad2663f928acf27e98662c861b094a6c306
 
 build:
