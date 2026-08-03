@@ -23,7 +23,6 @@ elif [[ "$target_platform" == "linux-aarch64" ]]; then
     DERIV=3
 else
     ENABLE_CUDA=OFF
-    DERIV=4e
     DERIV=4
 fi
 
