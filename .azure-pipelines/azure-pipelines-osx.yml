@@ -16,7 +16,7 @@ jobs:
         free_disk_space: quick
         pagefile_size: 0
         resize_partitions: false
-        store_build_artifacts: false
+        store_build_artifacts: null
         tools_install_dir: ~/miniforge3
       osx_arm64_:
         CONFIG: osx_arm64_
@@ -26,7 +26,7 @@ jobs:
         free_disk_space: quick
         pagefile_size: 0
         resize_partitions: false
-        store_build_artifacts: false
+        store_build_artifacts: null
         tools_install_dir: ~/miniforge3
   timeoutInMinutes: 360
   variables: {}
