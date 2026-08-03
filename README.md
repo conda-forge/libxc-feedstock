@@ -66,6 +66,7 @@ Current release info
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libxc-green.svg)](https://anaconda.org/conda-forge/libxc) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libxc.svg)](https://anaconda.org/conda-forge/libxc) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libxc.svg)](https://anaconda.org/conda-forge/libxc) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libxc.svg)](https://anaconda.org/conda-forge/libxc) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libxc--c-green.svg)](https://anaconda.org/conda-forge/libxc-c) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libxc-c.svg)](https://anaconda.org/conda-forge/libxc-c) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libxc-c.svg)](https://anaconda.org/conda-forge/libxc-c) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libxc-c.svg)](https://anaconda.org/conda-forge/libxc-c) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-pylibxc-green.svg)](https://anaconda.org/conda-forge/pylibxc) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/pylibxc.svg)](https://anaconda.org/conda-forge/pylibxc) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/pylibxc.svg)](https://anaconda.org/conda-forge/pylibxc) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/pylibxc.svg)](https://anaconda.org/conda-forge/pylibxc) |
 
 Installing libxc
 ================
@@ -77,16 +78,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libxc, libxc-c` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libxc, libxc-c, pylibxc` can be installed with `conda`:
 
 ```
-conda install libxc libxc-c
+conda install libxc libxc-c pylibxc
 ```
 
 or with `mamba`:
 
 ```
-mamba install libxc libxc-c
+mamba install libxc libxc-c pylibxc
 ```
 
 It is possible to list all of the versions of `libxc` available on your platform with `conda`:
