@@ -24,6 +24,7 @@ elif [[ "$target_platform" == "linux-aarch64" ]]; then
 else
     ENABLE_CUDA=OFF
     DERIV=4e
+    DERIV=4
 fi
 
 if [ "$(uname)" == "Darwin" ]; then
@@ -81,7 +82,7 @@ else
     -DENABLE_XHOST=OFF \
     -DBUILD_TESTING=ON \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.10 \
-    -DLIBXC_ENABLE_DERIV=${DERIV}
+    -DMAXORDER=${DERIV}
 fi
 
 cmake --build build --target install

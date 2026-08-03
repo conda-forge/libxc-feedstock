@@ -10,7 +10,7 @@ package:
 source:
   url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
   patches:
-    - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
+    # - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
     - 0002-treat-pylibxc-as-independent-project.patch
     # incorporated into v7.0.0 - 0003-cmake-cuda.patch
     - 0004-windows-interface-include-fix.patch
@@ -156,6 +156,7 @@ outputs:
     script: build_py.sh  # [unix]
     script: bld_py.bat  # [win]
     build:
+      skip: true
       string: {{ proc_type }}py{{ CONDA_PY }}h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
     requirements:
       build:
