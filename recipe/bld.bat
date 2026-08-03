@@ -15,9 +15,8 @@ cmake %CMAKE_ARGS% -G"Ninja" ^
       -DENABLE_PYTHON=OFF ^
       -DENABLE_XHOST=OFF ^
       -DBUILD_TESTING=OFF ^
-      -DDISABLE_KXC=OFF ^
       -DCMAKE_POLICY_VERSION_MINIMUM=3.10 ^
-      -DDISABLE_LXC=OFF
+      -DMAXORDER=4
 
 if errorlevel 1 exit 1
 
