@@ -1,0 +1,37 @@
+From 8b5b63a514957350837f31bf0968b5c8d506b94e Mon Sep 17 00:00:00 2001
+From: "Lori A. Burns" <lori.burns7@gmail.com>
+Date: Mon, 3 Aug 2026 18:21:15 -0400
+Subject: [PATCH 1/1] windows interface include fix2
+
+---
+ CMakeLists.txt | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8195880f7..eb03ef532 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -6,6 +6,9 @@ endif()
+ if(POLICY CMP0104)
+   cmake_policy(SET CMP0104 OLD) # Don't initialize CMAKE_CUDA_ARCHITECTURES when CMAKE_CUDA_COMPILER_ID is NVIDIA. Empty CUDA_ARCHITECTURES is allowed.
+ endif()
++if(POLICY CMP0219)
++  cmake_policy(SET CMP0219 NEW)
++endif()
+ project(Libxc
+   LANGUAGES C)
+ set(Libxc_AUTHORS      "Miguel A.L. Marques and others")
+@@ -476,8 +479,9 @@ endif()
+ # <<<  Export Interface  >>>
+ 
+ target_compile_definitions(xc INTERFACE USING_${PN})
++file(TO_CMAKE_PATH "${CMAKE_INSTALL_INCLUDEDIR}${NAMESPACE_INSTALL_INCLUDEDIR}" _forward_slash_iid)
+ target_include_directories(xc INTERFACE
+-  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}${NAMESPACE_INSTALL_INCLUDEDIR}>)
++  $<INSTALL_INTERFACE:${_forward_slash_iid}>)
+ 
+ # <<<  Export Config  >>>
+ 
+-- 
+2.43.0
+
