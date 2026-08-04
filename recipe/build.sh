@@ -17,10 +17,10 @@ if [[ ! -z "${cuda_compiler_version+x}" && "${cuda_compiler_version}" != "None" 
 
     NVCFLAGS+=" -O3 -std=c++17 --compiler-options ${CXXFLAGS// /,}"
     ENABLE_CUDA=ON
-    DERIV=2
+    DERIV=4
 elif [[ "$target_platform" == "linux-aarch64" ]]; then
     ENABLE_CUDA=OFF
-    DERIV=3
+    DERIV=4
 else
     ENABLE_CUDA=OFF
     DERIV=4
@@ -60,6 +60,7 @@ if [ ${target_platform} == "linux-ppc64le" ]; then
     -DENABLE_XHOST=OFF \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.10 \
     -DBUILD_TESTING=ON
+    -DMAXORDER=${DERIV}
 else
   export CMAKE_BUILD_PARALLEL_LEVEL=2
   ${BUILD_PREFIX}/bin/cmake ${CMAKE_ARGS} \
