@@ -1,0 +1,108 @@
+From ec04878f752984825f5348b3b330a84528857d3a Mon Sep 17 00:00:00 2001
+From: "Lori A. Burns" <lori.burns@gmail.com>
+Date: Fri, 3 Feb 2023 14:25:10 -0500
+Subject: [PATCH 1/1] disable longest 4th deriv offenders and rework deriv
+ option
+
+more deriv handling
+
+Conflicts:
+	cmake/LibxcConfig.cmake.in
+
+rename option
+
+update component handling
+---
+ CMakeLists.txt             | 27 ++++++++++++++++++++++++---
+ cmake/LibxcConfig.cmake.in |  8 +++++++-
+ 2 files changed, 31 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 494321974..29ab875f4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -57,6 +57,7 @@ if(${ENABLE_PYTHON} AND NOT ${BUILD_SHARED_LIBS})
+ endif()
+ # Highest derivative order compiled into the library:
+ #   0 = energy (exc) only, 1 = +vxc, 2 = +fxc, 3 = +kxc, 4 = +lxc.
++#   This also populates the variable `Libxc_CONFIG_COMPONENTS` with `xc_d*` for all values up to MAXORDER
+ set(MAXORDER 2 CACHE STRING "Highest derivative order to build (0..4)")
+ # Deprecated per-order switches, kept as aliases for one release. Pre-7.1 these
+ # were the primary control, with the defaults set below, and the built order was
+@@ -105,8 +106,13 @@ if(_dep_used)
+   message(DEPRECATION "DISABLE_*XC are deprecated; use -DMAXORDER=${_maxorder}")
+   set(MAXORDER ${_maxorder})
+ endif()
+-message(STATUS "MAXORDER: ${MAXORDER}")
+ add_compile_definitions(XC_MAXORDER=${MAXORDER})
++set(Libxc_CONFIG_COMPONENTS "")
++foreach(i RANGE ${MAXORDER})
++    list(APPEND Libxc_CONFIG_COMPONENTS "xc_d${i}")
++endforeach()
++message(STATUS "Final Maximum Derivative MAXORDER: ${MAXORDER}")
++message(STATUS "Library will satisfy XC DERIV components: ${Libxc_CONFIG_COMPONENTS}")
+ 
+ # Keep floating-point contraction off unless the builder asked otherwise. libxc
+ # checks its functionals against stored references at full precision, and
+@@ -327,8 +333,23 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 4
+ endif()
+ 
+ target_link_libraries(xc PUBLIC ${STANDARD_MATH_LIBRARY})
+-set_target_properties(xc PROPERTIES POSITION_INDEPENDENT_CODE ${BUILD_FPIC}
+-  SOVERSION ${${PROJECT_NAME}_SOMAJOR})
++
++set(export_properties
++  "Libxc_VERSION"
++  "Libxc_MAXORDER"
++  "Libxc_CONFIGURATION"
++  )
++
++set_target_properties(xc
++  PROPERTIES
++    POSITION_INDEPENDENT_CODE ${BUILD_FPIC}
++    SOVERSION ${${PROJECT_NAME}_SOMAJOR}
++    Libxc_VERSION "${PROJECT_VERSION}"
++    Libxc_MAXORDER "${MAXORDER}"
++    Libxc_CONFIGURATION "${Libxc_CONFIG_COMPONENTS}"
++  )
++set_property(TARGET xc APPEND PROPERTY EXPORT_PROPERTIES "${export_properties}")
++
+ if(${BUILD_SHARED_LIBS})
+   target_link_libraries(xc PRIVATE ${LIBC_INTERJECT})
+   if(APPLE)
+diff --git a/cmake/LibxcConfig.cmake.in b/cmake/LibxcConfig.cmake.in
+index 836e87313..4599e7cb4 100644
+--- a/cmake/LibxcConfig.cmake.in
++++ b/cmake/LibxcConfig.cmake.in
+@@ -20,6 +20,7 @@
+ #   static - search for only static library
+ #   C - search for C library only, even if Fortran available
+ #   Fortran - search for Fortran library (C library always present)
++#   xc_dD - search for library including functional derivatives order D (D=0..4)
+ #
+ #
+ # Exported targets:
+@@ -41,7 +42,7 @@
+ # ::
+ #
+ #   find_package(Libxc)
+-#   find_package(Libxc 6.0.0 EXACT CONFIG REQUIRED COMPONENTS shared C)
++#   find_package(Libxc 7.1.3 EXACT CONFIG REQUIRED COMPONENTS shared C xc_d2)
+ #
+ #
+ # The following variables can be set to guide the search for this package:
+@@ -92,6 +93,11 @@ if (EXISTS "${CMAKE_CURRENT_LIST_DIR}/${PN}Targets-Fortran.cmake")
+ endif()
+ list(FIND ${PN}_FIND_COMPONENTS "Fortran" _seek_Fortran)
+ 
++# check derivative component
++foreach(_xcd @Libxc_CONFIG_COMPONENTS@)  # Libxc_CONFIG_COMPONENTS
++    set(${PN}_${_xcd}_FOUND 1)
++endforeach()
++
+ check_required_components(${PN})
+ 
+ #-----------------------------------------------------------------------------
+-- 
+2.43.0
+

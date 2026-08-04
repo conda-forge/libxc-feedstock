@@ -10,7 +10,7 @@ package:
 source:
   url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
   patches:
-    # - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv.patch
+    - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv-712.patch
     - 0002-treat-pylibxc-as-independent-project-712.patch
     # incorporated into v7.0.0 - 0003-cmake-cuda.patch
     - 0004-windows-interface-include-fix-712.patch
