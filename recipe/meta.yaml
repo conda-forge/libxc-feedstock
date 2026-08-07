@@ -10,7 +10,7 @@ package:
 source:
   url: https://gitlab.com/libxc/libxc/-/archive/{{ version }}/libxc-{{ version }}.tar.bz2
   patches:
-    # 0002 & 0004 are merged, so can remove with next release. 0001 MR'd so check
+    # 001, 0002 & 0004 are merged, so can remove with next release.
     - 0001-disable-longest-4th-deriv-offenders-and-rework-deriv-712.patch
     - 0002-treat-pylibxc-as-independent-project-712.patch
     # incorporated into v7.0.0 - 0003-cmake-cuda.patch
@@ -18,7 +18,7 @@ source:
   sha256: 3915fac94416e4c415534223ea492ad2663f928acf27e98662c861b094a6c306
 
 build:
-  number: 0
+  number: 1
   skip: true  # [not linux and cuda_compiler_version != "None"]
 
 requirements:
@@ -60,6 +60,7 @@ outputs:
       host:
         - cuda-version ={{ cuda_compiler_version }}          # [(cuda_compiler_version or "").startswith("11")]
       run:
+        - __cuda                                             # [cuda_compiler_version != "None"]
         - {{ pin_compatible("cuda-version", max_pin="x") }}  # [(cuda_compiler_version or "").startswith("11")]
     files:
       - bin/xc-info                      # [unix]
@@ -126,6 +127,7 @@ outputs:
         - {{ pin_subpackage('libxc-c', exact=True) }}
         - cuda-version ={{ cuda_compiler_version }}          # [(cuda_compiler_version or "").startswith("11")]
       run:
+        - __cuda                                             # [cuda_compiler_version != "None"]
         - {{ pin_subpackage('libxc-c', exact=True) }}
         - {{ pin_compatible("cuda-version", max_pin="x") }}  # [(cuda_compiler_version or "").startswith("11")]
     files:
