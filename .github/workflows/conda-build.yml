@@ -46,7 +46,7 @@ jobs:
             resize_partitions: False
             runs_on: ['ubuntu-latest']
             tools_install_dir: ~/miniforge3
-          - CONFIG: linux_64_c_stdlib_version2.28cuda_compiler_version13.0fortran_compiler_version15
+          - CONFIG: linux_64_c_stdlib_version2.28cuda_compiler_version13.4fortran_compiler_version15
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-x86_64:alma10
             STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
@@ -82,7 +82,7 @@ jobs:
             resize_partitions: False
             runs_on: ['ubuntu-24.04-arm']
             tools_install_dir: ~/miniforge3
-          - CONFIG: linux_aarch64_c_stdlib_version2.28cuda_compiler_version13.0fortran_compiler_version15
+          - CONFIG: linux_aarch64_c_stdlib_version2.28cuda_compiler_version13.4fortran_compiler_version15
             DOCKER_IMAGE: quay.io/condaforge/linux-anvil-aarch64:alma10
             STORE_BUILD_ARTIFACTS: False
             UPLOAD_PACKAGES: True
